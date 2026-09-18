@@ -2,7 +2,7 @@
 session_start();
 require __DIR__ . '/includes/config.php';
 
-if (!isset($_SESSION['loja_usuario_id']) || !isset($_SESSION['loja_cliente_id'])) {
+if (!isset($_SESSION['loja_usuario_id']) || empty($_SESSION['loja_cliente_id'])) {
     header('Location: loja-login.php');
     exit;
 }

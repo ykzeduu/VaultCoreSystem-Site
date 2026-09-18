@@ -13,6 +13,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $usuario = $stmt->fetch();
 
     if ($usuario && password_verify($senha, $usuario['senha_hash'])) {
+
+        // "Cura" contas antigas (criadas antes do vínculo com a tabela de
+        // clientes existir): cria o registro de cliente agora, na hora do login.
+        if (empty($usuario['cliente_id'])) {
+            $stmt = $pdo->prepare("INSERT INTO clientes (razao_social, contato_principal) VALUES (?, ?)");
+            $stmt->execute([$usuario['nome'], $email]);
+            $usuario['cliente_id'] = $pdo->lastInsertId();
+
+            $pdo->prepare("UPDATE usuarios SET cliente_id = ? WHERE id = ?")
+                ->execute([$usuario['cliente_id'], $usuario['id']]);
+        }
+
         $_SESSION['loja_usuario_id']      = $usuario['id'];
         $_SESSION['loja_usuario_nome']    = $usuario['nome'];
         $_SESSION['loja_cliente_id']      = $usuario['cliente_id'];
