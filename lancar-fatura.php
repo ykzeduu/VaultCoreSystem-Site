@@ -2,10 +2,7 @@
 session_start();
 if (!isset($_SESSION["colaborador"]) || $_SESSION["colaborador"] !== true) { header("Location: login.php"); exit; }
 
-$pdo = new PDO("mysql:host=sql311.infinityfree.com;dbname=if0_41023013_db_clientes;charset=utf8", "if0_41023013", "2kVHu71TF3ly", [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-]);
+require __DIR__ . '/config.php';
 
 // --- LÓGICA DE PROCESSAMENTO ---
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['cliente_id'])) {
@@ -76,35 +73,7 @@ $precos_geracoes = [
 <head>
     <meta charset="UTF-8">
     <title>Lançar Contrato | VaultCore</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Segoe UI", sans-serif; }
-        body { background: #f2f4f6; padding: 140px 20px 50px; color: #1f2937; }
-        header { position: fixed; top: 0; left: 0; width: 100%; height: 120px; background: #152534; display: flex; align-items: center; justify-content: space-between; padding: 0 70px; z-index: 1000; }
-        .logo { font-size: 24px; font-weight: 600; color: #ffffff; }
-        .container { max-width: 1100px; margin: auto; background: #fff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
-        .cliente-select { background: #f8fafc; padding: 25px; border-radius: 12px; border: 2px solid #e2e8f0; margin-bottom: 30px; }
-        .equip-card { background: #fff; border: 1px solid #e5e7eb; padding: 25px; border-radius: 15px; margin-bottom: 25px; position: relative; border-left: 8px solid #1e899e; transition: 0.3s; }
-        .grid-equip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 15px; }
-        .half { grid-column: span 2; }
-        label { display: block; margin-bottom: 5px; font-size: 11px; font-weight: bold; color: #4b5563; text-transform: uppercase; }
-        input, select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #d1d5db; background: #f9fafb; font-size: 14px; }
-        input:read-only { background: #e5e7eb; color: #4b5563; cursor: not-allowed; }
-        .btn-add { 
-        background: #152534; 
-        color: white; 
-        border: none; 
-        padding: 15px 25px; 
-        border-radius: 10px 10px 10px 10px; /* Arredonda só em cima para encaixar na barra se quiser, ou mantenha 10px para tudo */
-        cursor: pointer; 
-        font-weight: bold; 
-        margin-top: 20px;    /* Espaço em relação ao último card */
-        margin-bottom: 0;     /* Remove margem de baixo para encostar na barra preta */
-        display: inline-block;
-        }
-        .resumo-fixo { background: #152534; color: white; padding: 30px; border-radius: 20px; margin-top: 40px; display: flex; justify-content: space-between; align-items: center; position: bottom; bottom: 20px; }
-        .subtotal-tag { background: #e0f2f1; color: #00796b; padding: 8px 15px; border-radius: 8px; font-weight: bold; display: inline-block; margin-top: 10px; }
-        .btn-remove { position: absolute; top: 20px; right: 20px; background: #fee2e2; color: #ef4444; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold; }
-    </style>
+    <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 

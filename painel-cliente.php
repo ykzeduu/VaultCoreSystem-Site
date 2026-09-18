@@ -9,12 +9,7 @@ if (!isset($_SESSION['codigo_equipamento'])) {
 $codigo = $_SESSION['codigo_equipamento'];
 
 try {
-    $pdo = new PDO(
-        "mysql:host=sql311.infinityfree.com;dbname=if0_41023013_db_clientes;charset=utf8",
-        "if0_41023013",
-        "2kVHu71TF3ly",
-        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-    );
+    require __DIR__ . '/config.php';
 } catch (PDOException $e) {
     die("Erro de conexão.");
 }
@@ -53,49 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['abrir_chamado'])) {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Painel do Cliente | VaultCore</title>
-<style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Segoe UI", sans-serif; }
-    body { background: #f0f2f5; color: #1a202c; }
-
-    header { background: #152534; height: 100px; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; }
-    header h1 { color: #fff; font-size: 22px; }
-    .btn-sair { color: #fff; text-decoration: none; padding: 10px 20px; background: rgba(255,255,255,0.1); border-radius: 8px; font-size: 14px; }
-
-    .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-
-    .card { background: #fff; border-radius: 20px; padding: 30px; box-shadow: 0 10px 15px rgba(0,0,0,0.05); }
-    .img-box { width: 100%; border-radius: 15px; overflow: hidden; margin-bottom: 20px; border: 1px solid #eee; }
-    .img-box img { width: 100%; height: auto; display: block; }
-    
-    .codigo-titulo { font-size: 32px; color: #152534; margin-bottom: 20px; font-weight: 800; }
-    .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #edf2f7; }
-    .label { color: #718096; font-size: 14px; }
-    .valor { font-weight: 600; }
-
-    .status { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; text-transform: uppercase; }
-    .disponivel { background: #d1fae5; color: #065f46; }
-    .locado { background: #ebf8ff; color: #3182ce; }
-    .manutencao { background: #fef3c7; color: #92400e; }
-
-    /* SEÇÃO ENDEREÇO E CONTATO (CONFORME SUA SOLICITAÇÃO) */
-    .cliente-detalhes { margin-top: 20px; padding: 20px; background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e0; }
-    .cliente-detalhes p { font-size: 14px; margin-bottom: 8px; line-height: 1.4; color: #4a5568; }
-    .cliente-detalhes strong { color: #152534; }
-
-    /* CHAMADO E WHATSAPP */
-    .form-chamado { background: #fff; border-radius: 20px; padding: 30px; box-shadow: 0 10px 15px rgba(0,0,0,0.05); border-top: 5px solid #1e899e; }
-    textarea, select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #d1d5db; margin-bottom: 15px; font-size: 15px; }
-    .btn-abrir { width: 100%; padding: 15px; background: #1e899e; color: #fff; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.3s; margin-bottom: 15px; font-size: 16px; }
-    .btn-abrir:hover { background: #152534; }
-    
-    /* BOTÃO WHATSAPP */
-    .btn-wpp { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 15px; background: #25d366; color: #fff; text-decoration: none; border-radius: 10px; font-weight: 700; transition: 0.3s; font-size: 16px; }
-    .btn-wpp:hover { background: #128c7e; transform: translateY(-2px); }
-
-    .alerta { background: #d1fae5; color: #065f46; padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center; font-weight: bold; border: 1px solid #34d399; }
-
-    @media (max-width: 850px) { .container { grid-template-columns: 1fr; } }
-</style>
+<link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 

@@ -15,12 +15,7 @@ if (!isset($_SESSION["colaborador"]) || $_SESSION["colaborador"] !== true) {
 }
 
 /* CONEXÃO MYSQL */
-$pdo = new PDO(
-    "mysql:host=sql311.infinityfree.com;dbname=if0_41023013_db_clientes;charset=utf8",
-    "if0_41023013",
-    "2kVHu71TF3ly",
-    [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC]
-);
+require __DIR__ . '/config.php';
 
 /* FILTRO DE MÊS/ANO E BUSCA */
 $mes_filtro = $_GET['mes'] ?? date('m');
@@ -67,52 +62,7 @@ $clientes_financeiro = $stmt_cli->fetchAll();
 <head>
 <meta charset="UTF-8">
 <title>Gestão Financeira | VaultCore</title>
-<style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Segoe UI", Arial, sans-serif; }
-    html, body { height: 100%; }
-
-    body {
-        background: #f2f4f6;
-        color: #1f2937;
-        overflow-y: scroll; /* BARRINHA SEMPRE VISÍVEL */
-        display: flex;
-        flex-direction: column;
-    }
-    header { position: fixed; top: 0; width: 100%; height: 120px; background: #152534; display: flex; align-items: center; justify-content: space-between; padding: 0 70px; z-index: 1000; }
-    .logo { font-size: 24px; font-weight: 600; color: #ffffff; }
-    nav { display: flex; align-items: center; gap: 30px; }
-    nav a { color: #d1d5db; text-decoration: none; font-size: 15px; padding-bottom: 6px; border-bottom: 3px solid transparent; transition: 0.2s; }
-    nav a.ativo { color: #65c9d1; border-bottom: 3px solid #65c9d1; }
-    .logout-btn { background: #1e899e; color: #ffffff; padding: 8px 18px; border-radius: 6px; font-size: 14px; font-weight: 600; text-decoration: none; }
-
-    main { padding: 170px 70px 50px; max-width: 1400px; margin: auto; width: 100%; flex: 1; }
-
-    .header-acoes { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-    
-    /* BARRA DE PESQUISA PADRÃO */
-    .search-box { background: #fff; padding: 20px; border-radius: 16px; margin-bottom: 30px; display: flex; gap: 10px; align-items: center; border: 2px solid #1e899e; }
-    .search-box input, .search-box select { padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; outline: none; }
-    .search-box button { padding: 12px 25px; background: #152534; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
-
-    .finance-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-bottom: 30px; }
-    .card-fin { background: #fff; padding: 25px; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-    .card-fin h3 { font-size: 11px; color: #6b7280; text-transform: uppercase; margin-bottom: 10px; font-weight: 800; }
-    .card-fin .valor { font-size: 28px; font-weight: 700; color: #152534; }
-    .card-fin.verde { border-left: 6px solid #10b981; }
-    .card-fin.amarelo { border-left: 6px solid #f59e0b; }
-    .card-fin.azul { border-left: 6px solid #1e899e; }
-
-    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-    th, td { padding: 18px; border-bottom: 1px solid #e5e7eb; text-align: left; }
-    th { background: #f9fafb; font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 1px; }
-
-    .btn-detalhes { background: #152534; color: #fff; padding: 8px 15px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; transition: 0.2s; }
-    .btn-detalhes:hover { background: #1e899e; }
-
-    .btn-novo { background: #1e899e; color: #fff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px; }
-    
-    footer { background: #152534; color: #ffffff; text-align: center; padding: 26px; font-size: 14px; margin-top: 40px; }
-</style>
+<link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 

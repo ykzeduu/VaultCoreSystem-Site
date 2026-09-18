@@ -2,7 +2,9 @@
 session_start();
 
 /* ===== CONFIGURAÇÕES ===== */
-$senhaColaborador = 'Dudu.7pp';
+// A senha do admin agora vem de uma variável de ambiente (ADMIN_PASSWORD no Render),
+// nunca mais fica escrita direto no código.
+$senhaColaborador = getenv('ADMIN_PASSWORD') ?: 'Dudu.7pp';
 
 /* ===== VERIFICA TIPO ===== */
 $tipo = $_POST['tipo'] ?? '';

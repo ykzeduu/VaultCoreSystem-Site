@@ -8,15 +8,7 @@ if (!isset($_SESSION["colaborador"]) || $_SESSION["colaborador"] !== true) {
 }
 
 /* CONEXÃO MYSQL */
-$pdo = new PDO(
-    "mysql:host=sql311.infinityfree.com;dbname=if0_41023013_db_clientes;charset=utf8",
-    "if0_41023013",
-    "2kVHu71TF3ly",
-    [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-    ]
-);
+require __DIR__ . '/config.php';
 
 /* BUSCA EQUIPAMENTOS PARA O SELECT */
 $stmt_eq = $pdo->query("SELECT e.id, e.codigo_equipamento, c.nome_fantasia, c.razao_social 
@@ -45,50 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
 <meta charset="UTF-8">
 <title>Abrir Chamado | VaultCore</title>
-<style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Segoe UI", Arial, sans-serif; }
-    
-    html, body { height: 100%; }
-    
-    body { 
-        background: #f2f4f6; 
-        color: #1f2937; 
-        padding-top: 140px; 
-        overflow-y: scroll; /* BARRINHA SEMPRE AQUI */
-    }
-
-    header { position: fixed; top: 0; width: 100%; height: 120px; background: #152534; display: flex; align-items: center; justify-content: space-between; padding: 0 70px; z-index: 1000; }
-    .logo { font-size: 24px; font-weight: 600; color: #ffffff; }
-
-    .container { max-width: 800px; margin: auto; background: #fff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); margin-bottom: 50px; }
-    
-    h2 { color: #152534; margin-bottom: 30px; border-left: 5px solid #1e899e; padding-left: 15px; }
-    
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    .full { grid-column: span 2; }
-    
-    label { display: block; margin-bottom: 8px; font-size: 13px; font-weight: 700; color: #1e899e; text-transform: uppercase; }
-    input, select, textarea { width: 100%; padding: 14px; border-radius: 8px; border: 1px solid #d1d5db; font-size: 15px; outline: none; background: #f9fafb; transition: 0.2s; }
-    input:focus, select:focus, textarea:focus { border-color: #1e899e; background: #fff; box-shadow: 0 0 0 4px rgba(30, 137, 158, 0.1); }
-
-    /* BOTÃO CORRIGIDO */
-    .btn-save { 
-        grid-column: span 2; /* Garante que o botão ocupe a largura toda no grid */
-        background: #1e899e; 
-        color: #fff; 
-        border: none; 
-        padding: 18px; 
-        border-radius: 10px; 
-        font-weight: bold; 
-        cursor: pointer; 
-        font-size: 16px; 
-        margin-top: 10px; 
-        transition: 0.3s; 
-    }
-    .btn-save:hover { background: #152534; transform: translateY(-2px); }
-    
-    .btn-cancelar { display: block; text-align: center; color: #6b7280; text-decoration: none; margin-top: 15px; font-size: 14px; }
-</style>
+<link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 
