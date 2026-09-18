@@ -80,9 +80,7 @@ $paginaAtiva = 'trabalhe';
     </div>
 </section>
 
-<footer>
-    © 2026 — VaultCore | Gestão de Infraestrutura. Todos os direitos reservados.
-</footer>
+<?php require __DIR__ . '/includes/footer.php'; ?>
 
 </body>
 </html>

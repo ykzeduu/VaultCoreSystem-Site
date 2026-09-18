@@ -42,8 +42,22 @@ unset($_SESSION['flash_erro']);
 </header>
 
 <section class="hero">
-    <h2>Computadores prontos para o seu dia a dia</h2>
-    <p>Desktops revisados, testados e com garantia — compre diretamente pelo site, com entrega e procedência.</p>
+    <div class="hero-conteudo">
+        <span class="hero-eyebrow">⚡ Loja oficial VaultCore</span>
+        <h2>Computadores prontos para o seu dia a dia</h2>
+        <p>Desktops revisados, testados e com garantia — compre diretamente pelo site, com entrega e procedência.</p>
+
+        <div class="hero-cta-row">
+            <a href="#modelos" class="btn hero-cta">Ver modelos disponíveis</a>
+            <a href="garantia.php" class="btn" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.28); box-shadow:none;">Como funciona a garantia</a>
+        </div>
+
+        <div class="hero-trust">
+            <div class="hero-trust-item"><span>✔</span> Revisado e testado</div>
+            <div class="hero-trust-item"><span>🛡</span> Garantia de 90 dias</div>
+            <div class="hero-trust-item"><span>💳</span> Pix, cartão ou boleto</div>
+        </div>
+    </div>
 </section>
 
 <?php if ($flashErro): ?>
@@ -52,7 +66,7 @@ unset($_SESSION['flash_erro']);
     </div>
 <?php endif; ?>
 
-<section class="modelos">
+<section class="modelos" id="modelos">
     <h2>Modelos disponíveis</h2>
     <p class="sub" style="text-align:center; margin-top:-30px; margin-bottom:40px;">
         Compre diretamente pelo site — este é um ambiente de demonstração, nenhuma cobrança real é feita.
@@ -65,24 +79,21 @@ unset($_SESSION['flash_erro']);
                 $poucasUnidades = !$semEstoque && $prod['estoque'] <= 2;
             ?>
             <div class="modelo">
-                <div style="position:relative;">
-                    <img src="<?= htmlspecialchars($prod['imagem']) ?>" style="<?= $semEstoque ? 'opacity:.45; filter:grayscale(1);' : '' ?>">
+                <div class="modelo-img-wrap<?= $semEstoque ? ' sem-estoque' : '' ?>">
+                    <img class="modelo-img" src="<?= htmlspecialchars($prod['imagem']) ?>" style="<?= $semEstoque ? 'opacity:.45; filter:grayscale(1);' : '' ?>">
                     <?php if ($semEstoque): ?>
-                        <span class="status locado" style="position:absolute; top:10px; right:10px;">Esgotado</span>
+                        <span class="status locado modelo-badge">Esgotado</span>
                     <?php elseif ($poucasUnidades): ?>
-                        <span class="status manutencao" style="position:absolute; top:10px; right:10px;">Últimas unidades</span>
+                        <span class="status manutencao modelo-badge">Últimas unidades</span>
                     <?php endif; ?>
                 </div>
 
                 <h3><?= htmlspecialchars($prod['nome']) ?></h3>
-                <p><?= htmlspecialchars($prod['especificacoes']) ?></p>
+                <p class="modelo-specs"><?= htmlspecialchars($prod['especificacoes']) ?></p>
 
-                <p style="font-size:20px; font-weight:700; color:var(--azul-900); margin-top:8px;">
+                <p class="modelo-preco">
                     R$ <?= number_format($prod['preco'], 2, ',', '.') ?>
-                </p>
-
-                <p class="info-secundaria" style="margin-bottom:10px;">
-                    <?= $semEstoque ? 'Sem unidades no momento' : $prod['estoque'] . ' unidade(s) disponível(is)' ?>
+                    <small><?= $semEstoque ? 'Sem unidades no momento' : $prod['estoque'] . ' unidade(s) disponível(is)' ?></small>
                 </p>
 
                 <?php if ($semEstoque): ?>
@@ -122,17 +133,20 @@ unset($_SESSION['flash_erro']);
 
     <div class="grid-planos">
         <div class="plano bronze">
-            <h3>🥉 Categoria Bronze: Estabilidade e Economia</h3>
+            <div class="plano-medalha">🥉</div>
+            <h3>Categoria Bronze: Estabilidade e Economia</h3>
             <p>"O essencial para o dia a dia." Perfeito para quem busca funcionalidade e o melhor custo-benefício do mercado. Com equipamentos de 3ª e 4ª geração, você garante uma máquina sólida para tarefas rotineiras, mantendo a produtividade em dia com o menor investimento.</p>
         </div>
 
         <div class="plano prata">
-            <h3>🥈 Categoria Prata: Modernidade e Versatilidade</h3>
+            <div class="plano-medalha">🥈</div>
+            <h3>Categoria Prata: Modernidade e Versatilidade</h3>
             <p>"Equilíbrio ideal entre performance e tecnologia." Eleve o nível da sua máquina com processadores de 8ª e 9ª geração. Esta categoria oferece total compatibilidade com o Windows 11, garantindo mais segurança, interface moderna e agilidade para o dia a dia, com um investimento acessível.</p>
         </div>
 
         <div class="plano ouro">
-            <h3>🥇 Categoria Ouro: Alta Performance e Inovação</h3>
+            <div class="plano-medalha">🥇</div>
+            <h3>Categoria Ouro: Alta Performance e Inovação</h3>
             <p>"Potência máxima para quem não pode perder tempo." Projetada para quem exige o topo do desempenho. Equipados com processadores de 12ª geração ou superior, esses computadores entregam velocidade excepcional em processos pesados e softwares exigentes.</p>
         </div>
     </div>
@@ -140,7 +154,9 @@ unset($_SESSION['flash_erro']);
 
 <section class="kits">
     <div class="conteudo">
-        <img src="assets/img/kit-completo.svg">
+        <div class="kits-img-wrap">
+            <img src="assets/img/kit-completo.svg">
+        </div>
         <div>
             <h2>Kits completos</h2>
             <p>
@@ -152,9 +168,7 @@ unset($_SESSION['flash_erro']);
     </div>
 </section>
 
-<footer>
-    © 2026 — VaultCore | Gestão de Infraestrutura. Todos os direitos reservados.
-</footer>
+<?php require __DIR__ . '/includes/footer.php'; ?>
 
 <?php require __DIR__ . '/includes/modal-completar-cadastro.php'; ?>
 

@@ -89,9 +89,7 @@ $paginaAtiva = 'garantia';
 
 </section>
 
-<footer>
-    © 2026 — VaultCore | Todos os direitos reservados.
-</footer>
+<?php require __DIR__ . '/includes/footer.php'; ?>
 
 </body>
 </html>

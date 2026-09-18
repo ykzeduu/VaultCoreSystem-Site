@@ -1,21 +1,55 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
-  <rect width="400" height="300" fill="#eef3f8"/>
-  <rect x="0" y="230" width="400" height="6" fill="#d7e0ea"/>
-  <rect x="95" y="70" width="180" height="120" rx="8" fill="#152534"/>
-  <rect x="107" y="82" width="156" height="96" rx="3" fill="#f0b53c"/>
-  <rect x="120" y="94" width="90" height="8" rx="4" fill="#ffffff" opacity="0.85"/>
-  <rect x="120" y="110" width="130" height="6" rx="3" fill="#ffffff" opacity="0.5"/>
-  <rect x="120" y="122" width="110" height="6" rx="3" fill="#ffffff" opacity="0.5"/>
-  <rect x="120" y="134" width="70" height="6" rx="3" fill="#ffffff" opacity="0.5"/>
+  <defs>
+    <linearGradient id="pa-tela" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d99a1f"/>
+      <stop offset="100%" stop-color="#f5b942"/>
+    </linearGradient>
+    <linearGradient id="pa-torre" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#3a2f16"/>
+      <stop offset="100%" stop-color="#152534"/>
+    </linearGradient>
+    <radialGradient id="pa-fan" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffe08a" stop-opacity="0.95"/>
+      <stop offset="70%" stop-color="#f5b942" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#f5b942" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="pa-shadow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0b1a26" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#0b1a26" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <ellipse cx="200" cy="234" rx="175" ry="16" fill="url(#pa-shadow)"/>
+
+  <!-- Monitor -->
+  <rect x="95" y="70" width="180" height="120" rx="10" fill="#152534"/>
+  <rect x="107" y="82" width="156" height="96" rx="4" fill="url(#pa-tela)"/>
+  <path d="M107 178 L263 178 L263 150 Z" fill="#ffffff" opacity="0.08"/>
+  <rect x="120" y="94" width="90" height="8" rx="4" fill="#152534" opacity="0.85"/>
+  <rect x="120" y="110" width="130" height="6" rx="3" fill="#152534" opacity="0.5"/>
+  <rect x="120" y="122" width="110" height="6" rx="3" fill="#152534" opacity="0.5"/>
+  <rect x="120" y="134" width="70" height="6" rx="3" fill="#152534" opacity="0.5"/>
+  <rect x="107" y="187" width="156" height="3" rx="1.5" fill="#f5b942"/>
   <rect x="175" y="190" width="20" height="18" fill="#152534"/>
   <rect x="150" y="208" width="70" height="8" rx="4" fill="#152534"/>
-  <rect x="290" y="95" width="70" height="130" rx="6" fill="#8a6a1c"/>
-  <rect x="300" y="110" width="50" height="6" rx="3" fill="#f0b53c"/>
-  <circle cx="325" cy="130" r="9" fill="#0b1a26"/>
-  <circle cx="325" cy="130" r="4" fill="#f0b53c"/>
-  <rect x="300" y="150" width="50" height="4" fill="#0b1a26"/>
-  <rect x="300" y="160" width="50" height="4" fill="#0b1a26"/>
-  <rect x="300" y="170" width="50" height="4" fill="#0b1a26"/>
-  <rect x="55" y="200" width="110" height="24" rx="5" fill="#c9d3dc"/>
-  <rect x="230" y="205" width="26" height="16" rx="7" fill="#c9d3dc"/>
+
+  <!-- Torre com RGB de alta performance -->
+  <circle cx="325" cy="130" r="28" fill="url(#pa-fan)"/>
+  <rect x="290" y="95" width="70" height="130" rx="8" fill="url(#pa-torre)"/>
+  <rect x="290" y="95" width="4" height="130" fill="#f5b942" opacity="0.85"/>
+  <rect x="300" y="110" width="50" height="6" rx="3" fill="#f5b942"/>
+  <circle cx="325" cy="130" r="11" fill="#0b1a26"/>
+  <circle cx="325" cy="130" r="11" fill="none" stroke="#f5b942" stroke-width="1.4"/>
+  <circle cx="325" cy="130" r="5" fill="#ffe08a"/>
+  <rect x="300" y="150" width="50" height="4" rx="2" fill="#0b1a26"/>
+  <rect x="300" y="160" width="50" height="4" rx="2" fill="#0b1a26"/>
+  <rect x="300" y="170" width="50" height="4" rx="2" fill="#0b1a26"/>
+  <rect x="293" y="215" width="64" height="3" rx="1.5" fill="#f5b942" opacity="0.85"/>
+
+  <!-- Teclado mecânico com iluminação e mouse -->
+  <rect x="55" y="200" width="110" height="24" rx="6" fill="#233042"/>
+  <rect x="61" y="205" width="98" height="4" rx="2" fill="#f5b942" opacity="0.75"/>
+  <rect x="61" y="212" width="98" height="4" rx="2" fill="#f5b942" opacity="0.35"/>
+  <rect x="230" y="205" width="26" height="16" rx="7" fill="#233042"/>
+  <rect x="240" y="207" width="4" height="6" rx="2" fill="#f5b942"/>
 </svg>

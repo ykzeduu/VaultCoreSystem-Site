@@ -116,9 +116,7 @@ $estoqueBaixo    = $pdo->query("SELECT COUNT(*) FROM produtos WHERE ativo = 1 AN
     </div>
 </section>
 
-<footer>
-    © 2026 — VaultCore | Loja de computadores
-</footer>
+<?php require __DIR__ . '/includes/footer.php'; ?>
 
 </body>
 </html>

@@ -1,10 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 60" width="260" height="60">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 60" width="280" height="60">
   <defs>
     <linearGradient id="vc-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#2fd1c8"/>
-      <stop offset="100%" stop-color="#1e9e97"/>
+      <stop offset="0%" stop-color="#5b7cfa"/>
+      <stop offset="100%" stop-color="#3d56d6"/>
     </linearGradient>
+    <linearGradient id="vc-grad-soft" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8fa4ff"/>
+      <stop offset="100%" stop-color="#5b7cfa"/>
+    </linearGradient>
+    <radialGradient id="vc-glow" cx="50%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#5b7cfa" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#5b7cfa" stop-opacity="0"/>
+    </radialGradient>
   </defs>
+
+  <!-- Glow atrás do escudo -->
+  <circle cx="27" cy="28" r="30" fill="url(#vc-glow)"/>
 
   <!-- Ícone: escudo com fechadura, remetendo a "cofre / segurança" -->
   <g transform="translate(2,4)">
@@ -12,13 +23,17 @@
           fill="url(#vc-grad)"/>
     <path d="M26 4 L46 12 V27 C46 39 37.5 47 26 51.6 C14.5 47 6 39 6 27 V12 Z"
           fill="#0b1a26"/>
+    <!-- brilho interno sutil -->
+    <path d="M26 4 L46 12 V27 C46 30 45.4 33 44.3 35.8 L26 24 Z" fill="url(#vc-grad-soft)" opacity="0.18"/>
     <!-- fechadura -->
-    <circle cx="26" cy="24" r="6.2" fill="#2fd1c8"/>
-    <rect x="22.6" y="24" width="6.8" height="12" rx="2.4" fill="#2fd1c8"/>
+    <circle cx="26" cy="24" r="6.2" fill="url(#vc-grad)"/>
+    <circle cx="26" cy="24" r="6.2" fill="none" stroke="#f5b942" stroke-width="0.8" opacity="0.7"/>
+    <rect x="22.6" y="24" width="6.8" height="12" rx="2.4" fill="url(#vc-grad)"/>
+    <circle cx="26" cy="26.5" r="1.4" fill="#f5b942"/>
   </g>
 
   <!-- Wordmark -->
   <text x="66" y="34" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#ffffff">Vault</text>
-  <text x="119" y="34" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#2fd1c8">Core</text>
-  <text x="66" y="48" font-family="Arial, Helvetica, sans-serif" font-size="10.5" letter-spacing="2.5" fill="#9fb0bf">SOLUÇÕES EM TI</text>
+  <text x="119" y="34" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#8fa4ff">Core</text>
+  <text x="66" y="48" font-family="Arial, Helvetica, sans-serif" font-size="10" letter-spacing="2.2" fill="#9fb0bf">LOJA DE COMPUTADORES</text>
 </svg>

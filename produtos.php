@@ -111,9 +111,7 @@ $produtos = $stmt->fetchAll();
     </table>
 </main>
 
-<footer>
-    © 2026 — VaultCore | Gestão de Infraestrutura
-</footer>
+<?php require __DIR__ . '/includes/footer.php'; ?>
 
 </body>
 </html>

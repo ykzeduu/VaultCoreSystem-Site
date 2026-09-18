@@ -42,6 +42,12 @@ foreach ($pedidos as $p) {
     $dia = (int)date('j', strtotime($p['criado_em']));
     $porDia[$dia] += $p['total'];
 }
+
+$mesesPt = [
+    1 => 'Janeiro', 2 => 'Fevereiro', 3 => 'Março', 4 => 'Abril',
+    5 => 'Maio', 6 => 'Junho', 7 => 'Julho', 8 => 'Agosto',
+    9 => 'Setembro', 10 => 'Outubro', 11 => 'Novembro', 12 => 'Dezembro',
+];
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -71,7 +77,7 @@ foreach ($pedidos as $p) {
     <form method="get" style="display:flex; gap:10px; margin-bottom:24px;">
         <select name="mes">
             <?php for ($m = 1; $m <= 12; $m++): ?>
-                <option value="<?= $m ?>" <?= $m === $mes ? 'selected' : '' ?>><?= date('F', mktime(0,0,0,$m,1)) ?></option>
+                <option value="<?= $m ?>" <?= $m === $mes ? 'selected' : '' ?>><?= $mesesPt[$m] ?></option>
             <?php endfor; ?>
         </select>
         <select name="ano">
@@ -134,9 +140,7 @@ foreach ($pedidos as $p) {
     </table>
 </main>
 
-<footer>
-    © 2026 — VaultCore | Loja de computadores
-</footer>
+<?php require __DIR__ . '/includes/footer.php'; ?>
 
 <script>
 const ctx = document.getElementById('graficoVendas');
@@ -147,13 +151,19 @@ new Chart(ctx, {
         datasets: [{
             label: 'Faturamento (R$)',
             data: [<?= implode(',', array_map(fn($v) => number_format($v, 2, '.', ''), $porDia)) ?>],
-            backgroundColor: '#2fd1c8'
+            backgroundColor: '#5b7cfa',
+            hoverBackgroundColor: '#3d56d6',
+            borderRadius: 6,
+            maxBarThickness: 42
         }]
     },
     options: {
         responsive: true,
         plugins: { legend: { display: false } },
-        scales: { y: { beginAtZero: true } }
+        scales: {
+            y: { beginAtZero: true, grid: { color: '#eef0f8' } },
+            x: { grid: { display: false } }
+        }
     }
 });
 </script>

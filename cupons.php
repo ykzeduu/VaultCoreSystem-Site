@@ -123,9 +123,7 @@ $cupons = $pdo->query("SELECT * FROM cupons ORDER BY criado_em DESC")->fetchAll(
     </table>
 </main>
 
-<footer>
-    © 2026 — VaultCore | Loja de computadores
-</footer>
+<?php require __DIR__ . '/includes/footer.php'; ?>
 
 </body>
 </html>

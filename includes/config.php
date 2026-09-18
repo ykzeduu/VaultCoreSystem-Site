@@ -22,15 +22,23 @@ $dbUser = getenv('DB_USER') ?: 'root';
 $dbPass = getenv('DB_PASSWORD') ?: '';
 
 try {
+    $opcoes = [
+        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    ];
+
+    // TiDB Serverless exige conexão TLS. Em desenvolvimento local
+    // (banco rodando em 127.0.0.1/localhost) o SSL não é necessário
+    // nem costuma estar disponível, então pulamos essa opção nesse caso.
+    if (!in_array($dbHost, ['127.0.0.1', 'localhost'], true)) {
+        $opcoes[PDO::MYSQL_ATTR_SSL_CA] = '/etc/ssl/certs/ca-certificates.crt';
+    }
+
     $pdo = new PDO(
         "mysql:host={$dbHost};port={$dbPort};dbname={$dbName};charset=utf8mb4",
         $dbUser,
         $dbPass,
-        [
-            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::MYSQL_ATTR_SSL_CA       => '/etc/ssl/certs/ca-certificates.crt', // TiDB Serverless exige conexão TLS
-        ]
+        $opcoes
     );
 } catch (PDOException $e) {
     http_response_code(500);

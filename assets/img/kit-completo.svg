@@ -1,31 +1,56 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="600" height="380">
-  <rect width="600" height="380" fill="#0b1a26"/>
-  <rect x="0" y="300" width="600" height="8" fill="#152534"/>
+  <defs>
+    <linearGradient id="kc-tela" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#132033"/>
+      <stop offset="100%" stop-color="#0e1826"/>
+    </linearGradient>
+    <radialGradient id="kc-glow1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#5b7cfa" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#5b7cfa" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="kc-glow2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f5b942" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#f5b942" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="kc-fan" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#8fa4ff" stop-opacity="0.9"/>
+      <stop offset="70%" stop-color="#5b7cfa" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#5b7cfa" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <ellipse cx="230" cy="190" rx="260" ry="170" fill="url(#kc-glow1)"/>
+  <ellipse cx="470" cy="210" rx="160" ry="140" fill="url(#kc-glow2)"/>
 
   <!-- monitor -->
-  <rect x="150" y="70" width="260" height="170" rx="10" fill="#152534" stroke="#2fd1c8" stroke-width="2"/>
-  <rect x="166" y="86" width="228" height="138" rx="4" fill="#10222f"/>
-  <rect x="182" y="102" width="130" height="10" rx="5" fill="#2fd1c8"/>
+  <rect x="150" y="70" width="260" height="170" rx="10" fill="#152534" stroke="#5b7cfa" stroke-width="2"/>
+  <rect x="166" y="86" width="228" height="138" rx="4" fill="url(#kc-tela)"/>
+  <path d="M166 224 L394 224 L394 170 Z" fill="#ffffff" opacity="0.04"/>
+  <rect x="182" y="102" width="130" height="10" rx="5" fill="#5b7cfa"/>
   <rect x="182" y="122" width="190" height="7" rx="3.5" fill="#c9d3dc" opacity="0.6"/>
   <rect x="182" y="138" width="160" height="7" rx="3.5" fill="#c9d3dc" opacity="0.6"/>
   <rect x="182" y="154" width="120" height="7" rx="3.5" fill="#c9d3dc" opacity="0.6"/>
-  <rect x="182" y="180" width="90" height="26" rx="6" fill="#2fd1c8" opacity="0.15" stroke="#2fd1c8"/>
+  <rect x="182" y="180" width="90" height="26" rx="6" fill="#5b7cfa" opacity="0.18" stroke="#5b7cfa"/>
   <rect x="270" y="240" width="20" height="24" fill="#152534"/>
   <rect x="235" y="264" width="90" height="10" rx="5" fill="#152534"/>
+  <rect x="150" y="240" width="260" height="3" rx="1.5" fill="#f5b942" opacity="0.7"/>
 
   <!-- gabinete -->
-  <rect x="440" y="110" width="110" height="180" rx="8" fill="#152534" stroke="#2fd1c8" stroke-width="2"/>
-  <rect x="458" y="130" width="74" height="10" rx="5" fill="#2fd1c8"/>
-  <circle cx="495" cy="160" r="13" fill="#0b1a26" stroke="#2fd1c8" stroke-width="2"/>
-  <circle cx="495" cy="160" r="5" fill="#2fd1c8"/>
-  <rect x="458" y="190" width="74" height="6" fill="#0b1a26"/>
-  <rect x="458" y="204" width="74" height="6" fill="#0b1a26"/>
-  <rect x="458" y="218" width="74" height="6" fill="#0b1a26"/>
-  <rect x="458" y="232" width="74" height="6" fill="#0b1a26"/>
+  <circle cx="495" cy="160" r="30" fill="url(#kc-fan)"/>
+  <rect x="440" y="110" width="110" height="180" rx="8" fill="#152534" stroke="#5b7cfa" stroke-width="2"/>
+  <rect x="440" y="110" width="4" height="180" fill="#f5b942" opacity="0.7"/>
+  <rect x="458" y="130" width="74" height="10" rx="5" fill="#5b7cfa"/>
+  <circle cx="495" cy="160" r="13" fill="#0b1a26" stroke="#5b7cfa" stroke-width="2"/>
+  <circle cx="495" cy="160" r="5" fill="#8fa4ff"/>
+  <rect x="458" y="190" width="74" height="6" rx="3" fill="#0b1a26"/>
+  <rect x="458" y="204" width="74" height="6" rx="3" fill="#0b1a26"/>
+  <rect x="458" y="218" width="74" height="6" rx="3" fill="#0b1a26"/>
+  <rect x="458" y="232" width="74" height="6" rx="3" fill="#0b1a26"/>
+  <rect x="458" y="266" width="74" height="3" rx="1.5" fill="#f5b942" opacity="0.75"/>
 
   <!-- teclado -->
-  <rect x="90" y="255" width="200" height="42" rx="6" fill="#152534" stroke="#2fd1c8" stroke-width="1.5"/>
-  <g fill="#2fd1c8" opacity="0.55">
+  <rect x="90" y="255" width="200" height="42" rx="6" fill="#152534" stroke="#5b7cfa" stroke-width="1.5"/>
+  <g fill="#5b7cfa" opacity="0.6">
     <rect x="102" y="264" width="14" height="10" rx="2"/><rect x="120" y="264" width="14" height="10" rx="2"/>
     <rect x="138" y="264" width="14" height="10" rx="2"/><rect x="156" y="264" width="14" height="10" rx="2"/>
     <rect x="174" y="264" width="14" height="10" rx="2"/><rect x="192" y="264" width="14" height="10" rx="2"/>
@@ -35,6 +60,6 @@
   </g>
 
   <!-- mouse -->
-  <rect x="310" y="260" width="26" height="42" rx="13" fill="#152534" stroke="#2fd1c8" stroke-width="1.5"/>
-  <rect x="320" y="266" width="6" height="14" rx="3" fill="#2fd1c8"/>
+  <rect x="310" y="260" width="26" height="42" rx="13" fill="#152534" stroke="#5b7cfa" stroke-width="1.5"/>
+  <rect x="320" y="266" width="6" height="14" rx="3" fill="#f5b942"/>
 </svg>
