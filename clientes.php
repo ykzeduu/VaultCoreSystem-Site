@@ -16,7 +16,7 @@ require __DIR__ . '/includes/config.php';
 
 $busca = $_GET['busca'] ?? '';
 
-$query = "SELECT c.*, u.perfil_completo, u.email,
+$query = "SELECT c.*, MAX(u.perfil_completo) AS perfil_completo, MAX(u.email) AS email,
                  COUNT(p.id) AS total_pedidos,
                  COALESCE(SUM(p.total), 0) AS total_gasto
           FROM clientes c
@@ -30,7 +30,9 @@ if ($busca !== '') {
                 OR u.email LIKE :busca";
 }
 
-$query .= " GROUP BY c.id ORDER BY c.criado_em DESC";
+$query .= " GROUP BY c.id, c.razao_social, c.nome_fantasia, c.cnpj, c.cep,
+                    c.endereco, c.contato_principal, c.contato_secundario, c.criado_em
+            ORDER BY c.criado_em DESC";
 
 $stmt = $pdo->prepare($query);
 if ($busca !== '') {
