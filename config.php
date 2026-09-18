@@ -29,7 +29,7 @@ try {
         [
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::MYSQL_ATTR_SSL_CA       => true, // TiDB Serverless exige conexão TLS
+            PDO::MYSQL_ATTR_SSL_CA       => '/etc/ssl/certs/ca-certificates.crt', // TiDB Serverless exige conexão TLS
         ]
     );
 } catch (PDOException $e) {
