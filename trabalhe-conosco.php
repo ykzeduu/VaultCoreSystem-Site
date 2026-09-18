@@ -21,7 +21,7 @@ $paginaAtiva = 'trabalhe';
     <nav>
         <a href="index.php" class="<?= $paginaAtiva == 'inicio' ? 'ativo' : '' ?>">Início</a>
         <a href="sobre.php" class="<?= $paginaAtiva == 'sobre' ? 'ativo' : '' ?>">Sobre nós</a>
-        <a href="suporte.php" class="<?= $paginaAtiva == 'suporte' ? 'ativo' : '' ?>">Suporte</a>
+        <a href="garantia.php" class="<?= $paginaAtiva == 'garantia' ? 'ativo' : '' ?>">Garantia</a>
         <a href="trabalhe-conosco.php" class="<?= $paginaAtiva == 'trabalhe' ? 'ativo' : '' ?>">Trabalhe Conosco</a>
         <?php if (isset($_SESSION['loja_usuario_id'])): ?>
             <a href="meus-pedidos.php">Meus Pedidos</a>
@@ -38,7 +38,7 @@ $paginaAtiva = 'trabalhe';
 
     <p>
         Buscamos profissionais comprometidos, com interesse em tecnologia,
-        infraestrutura de TI, suporte técnico e atendimento ao cliente.
+        vendas e atendimento ao cliente.
     </p>
 
     <p>

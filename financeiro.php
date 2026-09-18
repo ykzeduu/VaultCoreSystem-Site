@@ -1,68 +1,55 @@
 <?php
 session_start();
 
-/* LOGOUT DIRETO */
-if (isset($_GET['sair'])) {
-    session_destroy();
-    header("Location: index.php");
-    exit;
-}
-
-/* PROTEÇÃO */
 if (!isset($_SESSION["colaborador"]) || $_SESSION["colaborador"] !== true) {
     header("Location: login.php");
     exit;
 }
 
-/* CONEXÃO MYSQL */
 require __DIR__ . '/includes/config.php';
 
-/* FILTRO DE MÊS/ANO E BUSCA */
-$mes_filtro = $_GET['mes'] ?? date('m');
-$ano_filtro = $_GET['ano'] ?? date('Y');
-$busca = $_GET['busca'] ?? '';
+$mes = (int)($_GET['mes'] ?? date('n'));
+$ano = (int)($_GET['ano'] ?? date('Y'));
 
-/* TOTAIS PARA OS CARDS (Mês Selecionado) */
-$sql_totais = "SELECT 
-    SUM(CASE WHEN status = 'pago' THEN valor ELSE 0 END) as total_recebido,
-    SUM(CASE WHEN status = 'pendente' THEN valor ELSE 0 END) as total_pendente
-    FROM financeiro 
-    WHERE MONTH(data_vencimento) = :mes AND YEAR(data_vencimento) = :ano";
+/* Pedidos do mês selecionado */
+$stmt = $pdo->prepare("
+    SELECT p.*, c.razao_social AS cliente_nome
+    FROM pedidos p
+    LEFT JOIN usuarios u ON u.id = p.usuario_id
+    LEFT JOIN clientes c ON c.id = u.cliente_id
+    WHERE MONTH(p.criado_em) = ? AND YEAR(p.criado_em) = ?
+    ORDER BY p.criado_em DESC
+");
+$stmt->execute([$mes, $ano]);
+$pedidos = $stmt->fetchAll();
 
-$stmt_totais = $pdo->prepare($sql_totais);
-$stmt_totais->execute(['mes' => $mes_filtro, 'ano' => $ano_filtro]);
-$totais = $stmt_totais->fetch();
+$faturamentoMes = array_sum(array_column($pedidos, 'total'));
+$totalPedidosMes = count($pedidos);
+$ticketMedio = $totalPedidosMes > 0 ? $faturamentoMes / $totalPedidosMes : 0;
 
-/* LISTAGEM DE CLIENTES E VALORES DO MÊS */
-// Agrupamos por cliente para saber quanto cada um deve no mês atual
-$query_clientes = "SELECT 
-    c.id, 
-    c.nome_fantasia, 
-    c.razao_social, 
-    SUM(f.valor) as valor_mes,
-    MIN(f.data_vencimento) as proximo_vencimento
-    FROM clientes c
-    INNER JOIN financeiro f ON c.id = f.cliente_id
-    WHERE MONTH(f.data_vencimento) = :mes AND YEAR(f.data_vencimento) = :ano";
-
-if ($busca !== '') {
-    $query_clientes .= " AND (c.nome_fantasia LIKE :busca OR c.razao_social LIKE :busca)";
+/* Quebra por forma de pagamento */
+$porPagamento = ['pix' => 0, 'cartao' => 0, 'boleto' => 0];
+foreach ($pedidos as $p) {
+    if (isset($porPagamento[$p['forma_pagamento']])) {
+        $porPagamento[$p['forma_pagamento']] += $p['total'];
+    }
 }
 
-$query_clientes .= " GROUP BY c.id ORDER BY c.nome_fantasia ASC";
-
-$stmt_cli = $pdo->prepare($query_clientes);
-$params = ['mes' => $mes_filtro, 'ano' => $ano_filtro];
-if ($busca !== '') $params['busca'] = "%$busca%";
-$stmt_cli->execute($params);
-$clientes_financeiro = $stmt_cli->fetchAll();
+/* Faturamento por dia do mês, para o gráfico */
+$diasNoMes = (int)date('t', mktime(0, 0, 0, $mes, 1, $ano));
+$porDia = array_fill(1, $diasNoMes, 0);
+foreach ($pedidos as $p) {
+    $dia = (int)date('j', strtotime($p['criado_em']));
+    $porDia[$dia] += $p['total'];
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Gestão Financeira | VaultCore</title>
+<title>Financeiro | VaultCore</title>
 <link rel="stylesheet" href="assets/css/style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
 </head>
 <body>
 
@@ -70,86 +57,106 @@ $clientes_financeiro = $stmt_cli->fetchAll();
     <div class="logo"><img src="assets/img/logo.svg" alt="VaultCore"></div>
     <nav>
         <a href="admin.php">Dashboard</a>
-        <a href="equipamentos.php">Equipamentos</a>
-        <a href="produtos.php">Produtos (Loja)</a>
+        <a href="produtos.php">Produtos</a>
         <a href="clientes.php">Clientes</a>
-        <a href="chamados.php">Chamados</a>
+        <a href="cupons.php">Cupons</a>
         <a href="financeiro.php" class="ativo">Financeiro</a>
     </nav>
     <a href="admin.php?sair=1" class="logout-btn">Sair</a>
 </header>
 
 <main>
-    <div class="header-acoes">
-        <div>
-            <h2 style="font-size: 28px; color: #152534;">Gestão de Contratos</h2>
-            <p style="color: #6b7280;">Faturamento do período: <?= $mes_filtro ?>/<?= $ano_filtro ?></p>
-        </div>
-        <a href="lancar-fatura.php" class="btn-novo">+ NOVO CONTRATO</a>
-    </div>
+    <h2>Vendas</h2>
 
-    <div class="search-box">
-        <form method="get" style="display: flex; width: 100%; gap: 10px;">
-            <input type="text" name="busca" placeholder="Pesquisar cliente..." value="<?= htmlspecialchars($busca) ?>" style="flex: 2;">
-            <select name="mes">
-                <?php for($m=1; $m<=12; $m++): ?>
-                    <option value="<?= str_pad($m, 2, '0', STR_PAD_LEFT) ?>" <?= $mes_filtro == $m ? 'selected' : '' ?>>Mês <?= $m ?></option>
-                <?php endfor; ?>
-            </select>
-            <select name="ano">
-                <option value="2025" <?= $ano_filtro == '2025' ? 'selected' : '' ?>>2025</option>
-                <option value="2026" <?= $ano_filtro == '2026' ? 'selected' : '' ?>>2026</option>
-            </select>
-            <button type="submit">Filtrar</button>
-        </form>
-    </div>
+    <form method="get" style="display:flex; gap:10px; margin-bottom:24px;">
+        <select name="mes">
+            <?php for ($m = 1; $m <= 12; $m++): ?>
+                <option value="<?= $m ?>" <?= $m === $mes ? 'selected' : '' ?>><?= date('F', mktime(0,0,0,$m,1)) ?></option>
+            <?php endfor; ?>
+        </select>
+        <select name="ano">
+            <?php for ($a = date('Y'); $a >= date('Y') - 3; $a--): ?>
+                <option value="<?= $a ?>" <?= $a === $ano ? 'selected' : '' ?>><?= $a ?></option>
+            <?php endfor; ?>
+        </select>
+        <button type="submit">Filtrar</button>
+    </form>
 
     <div class="finance-grid">
+        <div class="card-fin azul">
+            <h3>Faturamento do mês</h3>
+            <p class="valor">R$ <?= number_format($faturamentoMes, 2, ',', '.') ?></p>
+        </div>
         <div class="card-fin verde">
-            <h3>Recebido</h3>
-            <span class="valor">R$ <?= number_format($totais['total_recebido'] ?? 0, 2, ',', '.') ?></span>
+            <h3>Pedidos no mês</h3>
+            <p class="valor"><?= $totalPedidosMes ?></p>
         </div>
         <div class="card-fin amarelo">
-            <h3>Pendente</h3>
-            <span class="valor">R$ <?= number_format($totais['total_pendente'] ?? 0, 2, ',', '.') ?></span>
-        </div>
-        <div class="card-fin azul">
-            <h3>Total do Mês</h3>
-            <span class="valor">R$ <?= number_format(($totais['total_recebido'] + $totais['total_pendente']), 2, ',', '.') ?></span>
+            <h3>Ticket médio</h3>
+            <p class="valor">R$ <?= number_format($ticketMedio, 2, ',', '.') ?></p>
         </div>
     </div>
 
-    <table>
+    <div class="grid" style="grid-template-columns: 2fr 1fr; margin-top:26px;">
+        <div class="card">
+            <h3>Faturamento por dia</h3>
+            <canvas id="graficoVendas" height="90"></canvas>
+        </div>
+        <div class="card">
+            <h3>Forma de pagamento</h3>
+            <p style="margin-top:10px;">🔵 Pix: R$ <?= number_format($porPagamento['pix'], 2, ',', '.') ?></p>
+            <p>🟣 Cartão: R$ <?= number_format($porPagamento['cartao'], 2, ',', '.') ?></p>
+            <p>🟠 Boleto: R$ <?= number_format($porPagamento['boleto'], 2, ',', '.') ?></p>
+        </div>
+    </div>
+
+    <h3 style="margin-top:30px;">Pedidos do período</h3>
+    <table style="margin-top:10px;">
         <thead>
-            <tr>
-                <th>Cliente / Locatário</th>
-                <th>Próximo Vencimento</th>
-                <th>Total no Mês</th>
-                <th style="text-align: center;">Ações</th>
-            </tr>
+            <tr><th>Pedido</th><th>Cliente</th><th>Data</th><th>Pagamento</th><th>Total</th><th>Status</th></tr>
         </thead>
         <tbody>
-            <?php foreach ($clientes_financeiro as $c): ?>
-            <tr>
-                <td>
-                    <div style="font-weight: bold; color: #152534;"><?= htmlspecialchars($c['nome_fantasia']) ?></div>
-                    <div style="font-size: 11px; color: #9ca3af;"><?= htmlspecialchars($c['razao_social']) ?></div>
-                </td>
-                <td><?= date('d/m/Y', strtotime($c['proximo_vencimento'])) ?></td>
-                <td style="font-weight: bold; color: #1e899e;">R$ <?= number_format($c['valor_mes'], 2, ',', '.') ?></td>
-                <td style="text-align: center;">
-                    <a href="ver-financeiro.php?id=<?= $c['id'] ?>" class="btn-detalhes">VERIFICAR CLIENTE</a>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-            <?php if(empty($clientes_financeiro)): ?>
-                <tr><td colspan="4" style="text-align:center; padding: 40px; color: #9ca3af;">Nenhuma movimentação para este filtro.</td></tr>
+            <?php if ($pedidos): ?>
+                <?php foreach ($pedidos as $p): ?>
+                <tr>
+                    <td data-label="Pedido">#<?= $p['id'] ?></td>
+                    <td data-label="Cliente"><?= htmlspecialchars($p['cliente_nome'] ?? '—') ?></td>
+                    <td data-label="Data"><?= date('d/m/Y H:i', strtotime($p['criado_em'])) ?></td>
+                    <td data-label="Pagamento"><?= ['pix'=>'Pix','cartao'=>'Cartão','boleto'=>'Boleto'][$p['forma_pagamento']] ?? '—' ?></td>
+                    <td data-label="Total">R$ <?= number_format($p['total'], 2, ',', '.') ?></td>
+                    <td data-label="Status"><span class="status pago"><?= htmlspecialchars($p['status']) ?></span></td>
+                </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr><td colspan="6" style="text-align:center; padding:40px; color:#999;">Nenhuma venda neste período.</td></tr>
             <?php endif; ?>
         </tbody>
     </table>
 </main>
 
-<footer>© 2026 — VaultCore | Gestão de Infraestrutura</footer>
+<footer>
+    © 2026 — VaultCore | Loja de computadores
+</footer>
+
+<script>
+const ctx = document.getElementById('graficoVendas');
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: [<?= implode(',', array_keys($porDia)) ?>],
+        datasets: [{
+            label: 'Faturamento (R$)',
+            data: [<?= implode(',', array_map(fn($v) => number_format($v, 2, '.', ''), $porDia)) ?>],
+            backgroundColor: '#2fd1c8'
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true } }
+    }
+});
+</script>
 
 </body>
 </html>

@@ -1,55 +1,34 @@
--- Schema do VaultCore, reconstruído a partir das queries encontradas no código.
--- Rode isso uma vez no console SQL do TiDB Cloud (aba "Chat2Query" ou "SQL Editor").
+-- Schema do VaultCore — modo LOJA (venda direta, fictícia).
+-- Rode isso no console SQL do TiDB Cloud (ou via setup-db.php) sempre que
+-- este arquivo mudar; todos os comandos são seguros de repetir.
 
+-- =========================================================================
+-- Remove o que sobrou do modelo antigo (locação de equipamentos + chamados
+-- de suporte). Você confirmou que pode apagar: não há mais essa função.
+-- =========================================================================
+DROP TABLE IF EXISTS chamados;
+DROP TABLE IF EXISTS equipamentos;
+DROP TABLE IF EXISTS financeiro;
+
+-- =========================================================================
+-- CLIENTES — agora preenchida automaticamente pelo cadastro que o próprio
+-- cliente faz no site (loja-cadastro.php), não mais por cadastro manual.
+-- =========================================================================
 CREATE TABLE IF NOT EXISTS clientes (
     id                  INT AUTO_INCREMENT PRIMARY KEY,
     razao_social        VARCHAR(150) NOT NULL,
     nome_fantasia       VARCHAR(150),
-    cnpj                VARCHAR(20),
+    cnpj                VARCHAR(20),   -- guarda CPF ou CNPJ
+    cep                 VARCHAR(10),
     endereco            VARCHAR(255),
     contato_principal   VARCHAR(150),
     contato_secundario  VARCHAR(150),
     criado_em           TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-CREATE TABLE IF NOT EXISTS equipamentos (
-    id                  INT AUTO_INCREMENT PRIMARY KEY,
-    codigo_equipamento  VARCHAR(50) NOT NULL UNIQUE,
-    numero_serie        VARCHAR(100),
-    modelo              VARCHAR(150),
-    geracao             VARCHAR(50),
-    status              VARCHAR(30) DEFAULT 'disponivel', -- disponivel | locado | manutencao
-    cliente_id          INT NULL,
-    imagem              VARCHAR(255),
-    criado_em           TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (cliente_id) REFERENCES clientes(id) ON DELETE SET NULL
-);
-
-CREATE TABLE IF NOT EXISTS chamados (
-    id                  INT AUTO_INCREMENT PRIMARY KEY,
-    equipamento_id      INT NOT NULL,
-    prioridade          VARCHAR(20) DEFAULT 'normal', -- baixa | normal | alta | urgente
-    descricao           TEXT,
-    status              VARCHAR(30) DEFAULT 'aberto', -- aberto | em_andamento | resolvido | fechado
-    notas_tecnicas      TEXT,
-    data_abertura       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (equipamento_id) REFERENCES equipamentos(id) ON DELETE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS financeiro (
-    id                  INT AUTO_INCREMENT PRIMARY KEY,
-    cliente_id          INT NOT NULL,
-    descricao           VARCHAR(255),
-    valor               DECIMAL(10,2) NOT NULL,
-    data_vencimento     DATE,
-    status              VARCHAR(20) DEFAULT 'pendente', -- pendente | pago | atrasado
-    tipo                VARCHAR(20) DEFAULT 'receita',   -- receita | despesa
-    criado_em           TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (cliente_id) REFERENCES clientes(id) ON DELETE CASCADE
-);
+ALTER TABLE clientes ADD COLUMN IF NOT EXISTS cep VARCHAR(10);
 
 -- =========================================================================
--- LOJA (catálogo público, contas de cliente e pedidos fictícios)
+-- LOJA (catálogo público, contas de cliente, carrinho/cupom e pedidos)
 -- =========================================================================
 
 CREATE TABLE IF NOT EXISTS produtos (
@@ -66,21 +45,33 @@ CREATE TABLE IF NOT EXISTS produtos (
 );
 
 CREATE TABLE IF NOT EXISTS usuarios (
-    id           INT AUTO_INCREMENT PRIMARY KEY,
-    nome         VARCHAR(150) NOT NULL,
-    email        VARCHAR(150) NOT NULL UNIQUE,
-    senha_hash   VARCHAR(255) NOT NULL,
-    criado_em    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    id               INT AUTO_INCREMENT PRIMARY KEY,
+    nome             VARCHAR(150) NOT NULL,
+    email            VARCHAR(150) NOT NULL UNIQUE,
+    senha_hash       VARCHAR(255) NOT NULL,
+    cliente_id       INT NULL,           -- liga com a tabela clientes
+    perfil_completo  TINYINT(1) NOT NULL DEFAULT 0,
+    criado_em        TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS cliente_id INT NULL;
+ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS perfil_completo TINYINT(1) NOT NULL DEFAULT 0;
 
 CREATE TABLE IF NOT EXISTS pedidos (
-    id           INT AUTO_INCREMENT PRIMARY KEY,
-    usuario_id   INT NOT NULL,
-    total        DECIMAL(10,2) NOT NULL DEFAULT 0,
-    status       VARCHAR(30) DEFAULT 'confirmado', -- pedido fictício: já nasce "confirmado"
-    criado_em    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    id               INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id       INT NOT NULL,
+    subtotal         DECIMAL(10,2) NOT NULL DEFAULT 0,
+    desconto         DECIMAL(10,2) NOT NULL DEFAULT 0,
+    total            DECIMAL(10,2) NOT NULL DEFAULT 0,
+    cupom_codigo     VARCHAR(50) NULL,
+    forma_pagamento  VARCHAR(20) NULL,   -- pix | cartao | boleto
+    status           VARCHAR(30) DEFAULT 'confirmado', -- pedido fictício: já nasce "confirmado"
+    criado_em        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
+ALTER TABLE pedidos ADD COLUMN IF NOT EXISTS subtotal DECIMAL(10,2) NOT NULL DEFAULT 0;
+ALTER TABLE pedidos ADD COLUMN IF NOT EXISTS desconto DECIMAL(10,2) NOT NULL DEFAULT 0;
+ALTER TABLE pedidos ADD COLUMN IF NOT EXISTS cupom_codigo VARCHAR(50) NULL;
+ALTER TABLE pedidos ADD COLUMN IF NOT EXISTS forma_pagamento VARCHAR(20) NULL;
 
 CREATE TABLE IF NOT EXISTS pedido_itens (
     id               INT AUTO_INCREMENT PRIMARY KEY,
@@ -93,6 +84,15 @@ CREATE TABLE IF NOT EXISTS pedido_itens (
     FOREIGN KEY (produto_id) REFERENCES produtos(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS cupons (
+    id           INT AUTO_INCREMENT PRIMARY KEY,
+    codigo       VARCHAR(50) NOT NULL UNIQUE,
+    tipo         VARCHAR(20) NOT NULL DEFAULT 'percentual', -- percentual | fixo
+    valor        DECIMAL(10,2) NOT NULL,                    -- 10 (=10%) ou um valor fixo em R$
+    ativo        TINYINT(1) NOT NULL DEFAULT 1,
+    criado_em    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Produtos iniciais (os 4 modelos que já existiam fixos no site).
 -- INSERT IGNORE evita duplicar caso você rode este script mais de uma vez.
 INSERT IGNORE INTO produtos (nome, descricao, especificacoes, preco, estoque, imagem, categoria) VALUES
@@ -100,3 +100,6 @@ INSERT IGNORE INTO produtos (nome, descricao, especificacoes, preco, estoque, im
 ('Essencial B',    'Um passo além em memória para multitarefa tranquila.', 'i5 / 16 GB RAM / SSD 480 GB', 1890.00, 5, 'assets/img/pc-essencial-b.svg',    'desktop'),
 ('Performance A',  'Para quem precisa de mais poder de processamento.', 'i7 / 16 GB RAM / SSD 240 GB', 2390.00, 3, 'assets/img/pc-performance-a.svg', 'desktop'),
 ('Performance B',  'O topo de linha para máxima produtividade.', 'i7 / 16 GB RAM / SSD 480 GB', 2690.00, 0, 'assets/img/pc-performance-b.svg', 'desktop');
+
+-- Um cupom de exemplo pra você testar (10% de desconto).
+INSERT IGNORE INTO cupons (codigo, tipo, valor, ativo) VALUES ('BEMVINDO10', 'percentual', 10, 1);

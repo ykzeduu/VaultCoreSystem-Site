@@ -43,10 +43,9 @@ $produtos = $stmt->fetchAll();
     <div class="logo"><img src="assets/img/logo.svg" alt="VaultCore"></div>
     <nav>
         <a href="admin.php">Dashboard</a>
-        <a href="equipamentos.php">Equipamentos</a>
-        <a href="produtos.php" class="ativo">Produtos (Loja)</a>
+        <a href="produtos.php" class="ativo">Produtos</a>
         <a href="clientes.php">Clientes</a>
-        <a href="chamados.php">Chamados</a>
+        <a href="cupons.php">Cupons</a>
         <a href="financeiro.php">Financeiro</a>
     </nav>
     <a href="admin.php?sair=1" class="logout-btn">Sair</a>

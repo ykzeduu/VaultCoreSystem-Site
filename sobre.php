@@ -21,7 +21,7 @@ $paginaAtiva = 'sobre';
     <nav>
         <a href="index.php" class="<?= $paginaAtiva == 'inicio' ? 'ativo' : '' ?>">Início</a>
         <a href="sobre.php" class="<?= $paginaAtiva == 'sobre' ? 'ativo' : '' ?>">Sobre nós</a>
-        <a href="suporte.php" class="<?= $paginaAtiva == 'suporte' ? 'ativo' : '' ?>">Suporte</a>
+        <a href="garantia.php" class="<?= $paginaAtiva == 'garantia' ? 'ativo' : '' ?>">Garantia</a>
         <a href="trabalhe-conosco.php" class="<?= $paginaAtiva == 'trabalhe' ? 'ativo' : '' ?>">Trabalhe Conosco</a>
         <?php if (isset($_SESSION['loja_usuario_id'])): ?>
             <a href="meus-pedidos.php">Meus Pedidos</a>
@@ -37,21 +37,20 @@ $paginaAtiva = 'sobre';
     <h1>Sobre a VaultCore</h1>
 
     <p>
-        A VaultCore atua na gestão de infraestrutura de TI, oferecendo
-        equipamentos padronizados, suporte técnico estruturado e contratos
-        claros para empresas que buscam eficiência e previsibilidade.
+        A VaultCore vende computadores revisados e prontos para uso,
+        com procedência garantida e preços justos, para quem precisa de
+        uma máquina confiável sem pagar o preço de um equipamento novo.
     </p>
 
     <p>
-        Nosso modelo elimina custos elevados com aquisição e manutenção
-        de hardware, permitindo que nossos clientes foquem no crescimento
-        do negócio sem preocupações operacionais.
+        Cada computador passa por testes antes de ser anunciado, e todo
+        pedido feito no site sai com garantia — sem letras miúdas.
     </p>
 
     <p>
-        Trabalhamos com equipamentos revisados, monitorados e preparados
-        para uso profissional, assegurando desempenho, segurança e
-        continuidade dos serviços.
+        Este é um ambiente de demonstração: as compras são fictícias e
+        nenhuma cobrança real é feita, mas o catálogo, o estoque e o
+        checkout funcionam como em uma loja de verdade.
     </p>
 
     <div class="cards">
@@ -61,24 +60,24 @@ $paginaAtiva = 'sobre';
             <div class="card">
                 <h3>Missão</h3>
                 <p>
-                    Garantir infraestrutura de TI confiável por meio de
-                    soluções práticas, suporte eficiente e gestão responsável.
+                    Vender computadores de qualidade, com transparência sobre
+                    o que está sendo entregue e um processo de compra simples.
                 </p>
             </div>
 
             <div class="card">
                 <h3>Visão</h3>
                 <p>
-                    Ser referência em gestão de infraestrutura de TI,
-                    reconhecida pela confiabilidade e excelência operacional.
+                    Ser a primeira opção para quem busca um computador revisado
+                    com confiança, do anúncio até a garantia.
                 </p>
             </div>
 
             <div class="card">
                 <h3>Valores</h3>
                 <p>
-                    Transparência, compromisso com o cliente,
-                    segurança da informação e melhoria contínua.
+                    Transparência com o cliente, preço justo e compromisso
+                    com a qualidade de cada equipamento vendido.
                 </p>
             </div>
         </div>

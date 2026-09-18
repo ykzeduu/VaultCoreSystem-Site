@@ -7,13 +7,7 @@ if (!isset($_SESSION["colaborador"]) || $_SESSION["colaborador"] !== true) {
 }
 
 require __DIR__ . '/includes/config.php';
-
-$diretorio = "assets/img/";
-$imagens_disponiveis = [];
-if (is_dir($diretorio)) {
-    $imagens_disponiveis = preg_grep('~\.(jpeg|jpg|png|webp|svg)$~i', scandir($diretorio));
-    $imagens_disponiveis = array_values(array_diff($imagens_disponiveis, ['logo.svg']));
-}
+require __DIR__ . '/includes/upload.php';
 
 $erro = '';
 
@@ -23,13 +17,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $especificacoes = trim($_POST['especificacoes']);
     $preco          = str_replace(',', '.', $_POST['preco']);
     $estoque        = (int)$_POST['estoque'];
-    $imagem         = 'assets/img/' . $_POST['imagem_escolhida'];
     $categoria      = trim($_POST['categoria']) ?: 'desktop';
     $ativo          = isset($_POST['ativo']) ? 1 : 0;
 
-    if ($nome === '' || $preco === '') {
+    $upload = processarUploadImagem('imagem', 'assets/uploads/produtos');
+
+    if ($upload['erro']) {
+        $erro = $upload['erro'];
+    } elseif ($nome === '' || $preco === '') {
         $erro = 'Preencha ao menos o nome e o preço do produto.';
     } else {
+        $imagem = $upload['caminho'] ?: 'assets/img/pc-essencial-a.svg'; // imagem padrão se nada for enviado
+
         try {
             $sql = "INSERT INTO produtos (nome, descricao, especificacoes, preco, estoque, imagem, categoria, ativo)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -71,8 +70,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <img id="img-preview" src="https://placehold.co/160x120?text=Selecione" alt="Preview">
     </div>
 
-    <form method="post">
-        <div class="grid">
+    <form method="post" enctype="multipart/form-data">
+        <div class="form-grid">
             <div class="full">
                 <label>Nome do produto</label>
                 <input type="text" name="nome" placeholder="Ex: Essencial A" required>
@@ -88,22 +87,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <textarea name="descricao" rows="3" placeholder="Breve descrição para o cliente"></textarea>
             </div>
 
-            <div class="half">
+            <div>
                 <label>Preço (R$)</label>
                 <input type="text" name="preco" placeholder="Ex: 1590.00" required>
             </div>
 
-            <div class="half">
+            <div>
                 <label>Estoque disponível</label>
                 <input type="number" name="estoque" min="0" value="0" required>
             </div>
 
-            <div class="half">
+            <div>
                 <label>Categoria</label>
                 <input type="text" name="categoria" placeholder="desktop" value="desktop">
             </div>
 
-            <div class="half">
+            <div>
                 <label>Visível na loja?</label>
                 <select name="ativo">
                     <option value="1">Sim, mostrar no site</option>
@@ -112,14 +111,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </div>
 
             <div class="full">
-                <label>Imagem</label>
-                <select name="imagem_escolhida" id="imagem_escolhida" onchange="atualizarPreview()" required>
-                    <option value="">-- Escolha a imagem --</option>
-                    <?php foreach ($imagens_disponiveis as $img): ?>
-                        <option value="<?= htmlspecialchars($img) ?>"><?= htmlspecialchars($img) ?></option>
-                    <?php endforeach; ?>
-                </select>
-                <span class="info-secundaria">As imagens vêm da pasta assets/img/. Adicione arquivos novos lá para aparecerem aqui.</span>
+                <label>Foto do produto</label>
+                <input type="file" name="imagem" id="imagem" accept="image/png,image/jpeg,image/webp,image/svg+xml" onchange="atualizarPreview()">
+                <span class="info-secundaria">JPG, PNG, WEBP ou SVG — até 5 MB. Se deixar em branco, uso uma ilustração padrão.</span>
             </div>
 
             <div class="full">
@@ -132,10 +126,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <script>
 function atualizarPreview() {
-    const select = document.getElementById('imagem_escolhida');
+    const input = document.getElementById('imagem');
     const preview = document.getElementById('img-preview');
-    const pasta = 'assets/img/';
-    preview.src = select.value ? pasta + select.value : 'https://placehold.co/160x120?text=Selecione';
+    if (input.files && input.files[0]) {
+        preview.src = URL.createObjectURL(input.files[0]);
+    } else {
+        preview.src = 'https://placehold.co/160x120?text=Selecione';
+    }
 }
 </script>
 

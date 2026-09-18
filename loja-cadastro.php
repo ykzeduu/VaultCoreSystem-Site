@@ -20,12 +20,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmt->fetch()) {
             $erro = 'Já existe uma conta com esse e-mail.';
         } else {
-            $hash = password_hash($senha, PASSWORD_DEFAULT);
-            $stmt = $pdo->prepare("INSERT INTO usuarios (nome, email, senha_hash) VALUES (?, ?, ?)");
-            $stmt->execute([$nome, $email, $hash]);
+            $pdo->beginTransaction();
 
-            $_SESSION['loja_usuario_id']   = $pdo->lastInsertId();
-            $_SESSION['loja_usuario_nome'] = $nome;
+            // Cria também o registro na tabela de clientes (mesma usada no CRM do admin),
+            // já unificando quem compra na loja com a base de clientes da empresa.
+            $stmt = $pdo->prepare("INSERT INTO clientes (razao_social, contato_principal) VALUES (?, ?)");
+            $stmt->execute([$nome, $email]);
+            $clienteId = $pdo->lastInsertId();
+
+            $hash = password_hash($senha, PASSWORD_DEFAULT);
+            $stmt = $pdo->prepare("INSERT INTO usuarios (nome, email, senha_hash, cliente_id, perfil_completo) VALUES (?, ?, ?, ?, 0)");
+            $stmt->execute([$nome, $email, $hash, $clienteId]);
+            $usuarioId = $pdo->lastInsertId();
+
+            $pdo->commit();
+
+            $_SESSION['loja_usuario_id']      = $usuarioId;
+            $_SESSION['loja_usuario_nome']    = $nome;
+            $_SESSION['loja_cliente_id']      = $clienteId;
+            $_SESSION['loja_perfil_completo'] = false;
 
             header('Location: index.php');
             exit;

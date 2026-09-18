@@ -54,9 +54,14 @@ $itens = $stmt->fetchAll();
             </tbody>
         </table>
 
-        <p style="margin-top:16px; font-size:20px; font-weight:700; color:var(--azul-900);">
+        <p style="margin-top:16px;">Subtotal: R$ <?= number_format($pedido['subtotal'], 2, ',', '.') ?></p>
+        <?php if ($pedido['desconto'] > 0): ?>
+            <p>Desconto<?= $pedido['cupom_codigo'] ? ' (' . htmlspecialchars($pedido['cupom_codigo']) . ')' : '' ?>: -R$ <?= number_format($pedido['desconto'], 2, ',', '.') ?></p>
+        <?php endif; ?>
+        <p style="font-size:20px; font-weight:700; color:var(--azul-900);">
             Total: R$ <?= number_format($pedido['total'], 2, ',', '.') ?>
         </p>
+        <p class="info-secundaria">Forma de pagamento: <?= ['pix'=>'Pix','cartao'=>'Cartão de crédito','boleto'=>'Boleto'][$pedido['forma_pagamento']] ?? $pedido['forma_pagamento'] ?></p>
 
         <div style="margin-top:24px; display:flex; gap:12px; justify-content:center;">
             <a href="index.php" class="btn">Voltar à loja</a>

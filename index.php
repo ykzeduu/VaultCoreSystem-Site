@@ -13,7 +13,7 @@ unset($_SESSION['flash_erro']);
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>VaultCore - Locação de Equipamentos de TI</title>
+<title>VaultCore - Venda de Computadores</title>
 
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -28,9 +28,10 @@ unset($_SESSION['flash_erro']);
     <nav>
         <a href="index.php" class="<?= $paginaAtiva == 'inicio' ? 'ativo' : '' ?>">Início</a>
         <a href="sobre.php">Sobre nós</a>
-        <a href="suporte.php">Suporte</a>
+        <a href="garantia.php">Garantia</a>
         <a href="trabalhe-conosco.php">Trabalhe Conosco</a>
         <?php if (isset($_SESSION['loja_usuario_id'])): ?>
+            <a href="carrinho.php">Carrinho<?php if (!empty($_SESSION['carrinho'])): ?> (<?= array_sum($_SESSION['carrinho']) ?>)<?php endif; ?></a>
             <a href="meus-pedidos.php">Meus Pedidos</a>
         <?php else: ?>
             <a href="loja-login.php">Entrar / Cadastrar</a>
@@ -41,8 +42,8 @@ unset($_SESSION['flash_erro']);
 </header>
 
 <section class="hero">
-    <h2>Locação e venda de computadores</h2>
-    <p>Soluções completas em infraestrutura de TI com previsibilidade, suporte e desempenho.</p>
+    <h2>Computadores prontos para o seu dia a dia</h2>
+    <p>Desktops revisados, testados e com garantia — compre diretamente pelo site, com entrega e procedência.</p>
 </section>
 
 <?php if ($flashErro): ?>
@@ -87,10 +88,10 @@ unset($_SESSION['flash_erro']);
                 <?php if ($semEstoque): ?>
                     <button class="btn" disabled style="opacity:.5; cursor:not-allowed;">Esgotado</button>
                 <?php elseif (isset($_SESSION['loja_usuario_id'])): ?>
-                    <form method="post" action="comprar.php" style="display:flex; gap:8px; align-items:center;">
+                    <form method="post" action="adicionar-carrinho.php" style="display:flex; gap:8px; align-items:center;">
                         <input type="hidden" name="produto_id" value="<?= $prod['id'] ?>">
                         <input type="number" name="quantidade" value="1" min="1" max="<?= $prod['estoque'] ?>" style="width:64px;">
-                        <button type="submit" class="btn">Comprar</button>
+                        <button type="submit" class="btn">Adicionar ao carrinho</button>
                     </form>
                 <?php else: ?>
                     <a href="loja-login.php?voltar=index.php" class="btn">Entrar para comprar</a>
@@ -107,9 +108,11 @@ unset($_SESSION['flash_erro']);
 
 <section class="manutencao">
     <div class="box">
-        <h2>Manutenção e suporte</h2>
+        <h2>Garantia e procedência</h2>
         <p>
-            Não deixe sua operação parar por problemas técnicos. Conheça nossos planos de gestão e manutenção de equipamentos: uma solução completa que une prevenção inteligente, especialistas prontos para o atendimento e reposição ágil de hardware. Mais do que suporte, entregamos a garantia de que sua infraestrutura estará sempre disponível e atualizada para os desafios do dia a dia.
+            Todo computador vendido pela VaultCore passa por revisão e testes antes de ser anunciado.
+            Você compra sabendo exatamente o que está levando, com garantia de 90 dias contra defeitos
+            de fabricação — sem letras miúdas. Veja os detalhes na página de <a href="garantia.php">Garantia</a>.
         </p>
     </div>
 </section>
@@ -120,17 +123,17 @@ unset($_SESSION['flash_erro']);
     <div class="grid-planos">
         <div class="plano bronze">
             <h3>🥉 Categoria Bronze: Estabilidade e Economia</h3>
-            <p>"O essencial para o dia a dia." Perfeito para empresas que buscam funcionalidade e o melhor custo-benefício do mercado. Com equipamentos de 3ª e 4ª geração, você garante uma estrutura sólida para tarefas rotinas e operacionais, mantendo a produtividade em dia sem nenhum acréscimo no valor do seu plano base.</p>
+            <p>"O essencial para o dia a dia." Perfeito para quem busca funcionalidade e o melhor custo-benefício do mercado. Com equipamentos de 3ª e 4ª geração, você garante uma máquina sólida para tarefas rotineiras, mantendo a produtividade em dia com o menor investimento.</p>
         </div>
 
         <div class="plano prata">
             <h3>🥈 Categoria Prata: Modernidade e Versatilidade</h3>
-            <p>"Equilíbrio ideal entre performance e tecnologia." Eleve o nível da sua operação com processadores de 8ª e 9ª geração. Esta categoria oferece total compatibilidade com o Windows 11, garantindo mais segurança, uma interface moderna e a agilidade necessária para fluxos de trabalho multitarefa, com um investimento adicional extremamente acessível.</p>
+            <p>"Equilíbrio ideal entre performance e tecnologia." Eleve o nível da sua máquina com processadores de 8ª e 9ª geração. Esta categoria oferece total compatibilidade com o Windows 11, garantindo mais segurança, interface moderna e agilidade para o dia a dia, com um investimento acessível.</p>
         </div>
 
         <div class="plano ouro">
             <h3>🥇 Categoria Ouro: Alta Performance e Inovação</h3>
-            <p>"Potência máxima para quem não pode perder tempo." Projetada para profissionais que exigem o topo do desempenho. Equipados com processadores de 12ª geração ou superior, esses ativos entregam velocidade excepcional em processos pesados e softwares exigentes. A escolha definitiva para garantir longevidade tecnológica e máxima fluidez em cada segundo de trabalho.</p>
+            <p>"Potência máxima para quem não pode perder tempo." Projetada para quem exige o topo do desempenho. Equipados com processadores de 12ª geração ou superior, esses computadores entregam velocidade excepcional em processos pesados e softwares exigentes.</p>
         </div>
     </div>
 </section>
@@ -141,9 +144,9 @@ unset($_SESSION['flash_erro']);
         <div>
             <h2>Kits completos</h2>
             <p>
-                Soluções prontas com CPU, monitor, teclado e mouse,
-                ideais para empresas que precisam de implantação rápida
-                e padronização de ambientes.
+                Combos prontos com CPU, monitor, teclado e mouse — ideais
+                para quem quer montar um posto de trabalho completo em
+                uma única compra, com tudo já compatível entre si.
             </p>
         </div>
     </div>
@@ -152,6 +155,8 @@ unset($_SESSION['flash_erro']);
 <footer>
     © 2026 — VaultCore | Gestão de Infraestrutura. Todos os direitos reservados.
 </footer>
+
+<?php require __DIR__ . '/includes/modal-completar-cadastro.php'; ?>
 
 </body>
 </html>

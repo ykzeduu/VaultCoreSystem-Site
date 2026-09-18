@@ -37,8 +37,10 @@ if ($pedidos) {
     <nav>
         <a href="index.php">Início</a>
         <a href="sobre.php">Sobre nós</a>
-        <a href="suporte.php">Suporte</a>
+        <a href="garantia.php">Garantia</a>
         <a href="trabalhe-conosco.php">Trabalhe Conosco</a>
+        <a href="carrinho.php">Carrinho<?php if (!empty($_SESSION['carrinho'])): ?> (<?= array_sum($_SESSION['carrinho']) ?>)<?php endif; ?></a>
+        <a href="meus-pedidos.php" class="ativo">Meus Pedidos</a>
     </nav>
     <a href="loja-logout.php" class="admin-btn">Sair da conta</a>
 </header>
@@ -73,7 +75,11 @@ if ($pedidos) {
                 </table>
                 <p style="text-align:right; margin-top:10px; font-weight:700; color:var(--azul-900);">
                     Total: R$ <?= number_format($pedido['total'], 2, ',', '.') ?>
+                    <?php if ($pedido['desconto'] > 0): ?>
+                        <span class="info-secundaria" style="font-weight:400;">(desconto de R$ <?= number_format($pedido['desconto'], 2, ',', '.') ?><?= $pedido['cupom_codigo'] ? ' — ' . htmlspecialchars($pedido['cupom_codigo']) : '' ?>)</span>
+                    <?php endif; ?>
                 </p>
+                <p class="info-secundaria">Pagamento: <?= ['pix'=>'Pix','cartao'=>'Cartão de crédito','boleto'=>'Boleto'][$pedido['forma_pagamento']] ?? '—' ?></p>
             </div>
         <?php endforeach; ?>
     <?php endif; ?>

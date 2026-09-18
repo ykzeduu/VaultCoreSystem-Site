@@ -20,21 +20,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['excluir'])) {
         header("Location: clientes.php?msg=excluido");
         exit;
     } catch (PDOException $e) {
-        $erro_exclusao = "Não é possível excluir um cliente que possui equipamentos ou chamados vinculados.";
+        $erro_exclusao = "Não é possível excluir um cliente que possui pedidos vinculados.";
     }
 }
 
 /* PROCESSA ATUALIZAÇÃO */
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['atualizar'])) {
     $razao_social = $_POST["razao_social"];
-    $nome_fantasia = $_POST["nome_fantasia"]; // Novo campo
+    $nome_fantasia = $_POST["nome_fantasia"];
     $cnpj = $_POST["cnpj"];
+    $cep = $_POST["cep"];
     $endereco = $_POST["endereco"];
     $contato_principal = $_POST["contato_principal"];
     $contato_secundario = $_POST["contato_secundario"];
 
-    $sql = "UPDATE clientes SET razao_social = ?, nome_fantasia = ?, cnpj = ?, endereco = ?, contato_principal = ?, contato_secundario = ? WHERE id = ?";
-    $pdo->prepare($sql)->execute([$razao_social, $nome_fantasia, $cnpj, $endereco, $contato_principal, $contato_secundario, $id]);
+    $sql = "UPDATE clientes SET razao_social = ?, nome_fantasia = ?, cnpj = ?, cep = ?, endereco = ?, contato_principal = ?, contato_secundario = ? WHERE id = ?";
+    $pdo->prepare($sql)->execute([$razao_social, $nome_fantasia, $cnpj, $cep, $endereco, $contato_principal, $contato_secundario, $id]);
     
     header("Location: clientes.php?msg=atualizado");
     exit;
@@ -70,7 +71,7 @@ if (!$cliente) { header("Location: clientes.php"); exit; }
 
     <form method="post">
         <p class="secao-titulo">Identificação</p>
-        <div class="grid">
+        <div class="form-grid">
             <div>
                 <label>Razão Social (Nome Real)</label>
                 <input type="text" name="razao_social" value="<?= htmlspecialchars($cliente['razao_social']) ?>" placeholder="Ex: Silva & Silva LTDA" required>
@@ -86,7 +87,11 @@ if (!$cliente) { header("Location: clientes.php"); exit; }
         </div>
 
         <p class="secao-titulo">Localização</p>
-        <div class="grid">
+        <div class="form-grid">
+            <div>
+                <label>CEP</label>
+                <input type="text" name="cep" value="<?= htmlspecialchars($cliente['cep'] ?? '') ?>" placeholder="00000-000">
+            </div>
             <div class="full">
                 <label>Endereço Completo</label>
                 <textarea name="endereco" rows="3" required><?= htmlspecialchars($cliente['endereco']) ?></textarea>
@@ -94,7 +99,7 @@ if (!$cliente) { header("Location: clientes.php"); exit; }
         </div>
 
         <p class="secao-titulo">Canais de Contato</p>
-        <div class="grid">
+        <div class="form-grid">
             <div>
                 <label>Contato Principal (Telefone/Whats)</label>
                 <input type="text" name="contato_principal" value="<?= htmlspecialchars($cliente['contato_principal']) ?>" placeholder="(67) 99999-9999">
@@ -107,7 +112,7 @@ if (!$cliente) { header("Location: clientes.php"); exit; }
 
         <button type="submit" name="atualizar" class="btn-save">SALVAR ALTERAÇÕES</button>
 
-        <button type="submit" name="excluir" class="btn-delete" onclick="return confirm('ATENÇÃO: Deseja excluir este cliente permanentemente? Isso pode afetar históricos de chamados.');">
+        <button type="submit" name="excluir" class="btn-delete" onclick="return confirm('ATENÇÃO: Deseja excluir este cliente permanentemente? Isso também afeta o login dele na loja.');">
             EXCLUIR CLIENTE DO SISTEMA
         </button>
     </form>

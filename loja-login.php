@@ -8,13 +8,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
     $senha = $_POST['senha'] ?? '';
 
-    $stmt = $pdo->prepare("SELECT id, nome, senha_hash FROM usuarios WHERE email = ?");
+    $stmt = $pdo->prepare("SELECT id, nome, senha_hash, cliente_id, perfil_completo FROM usuarios WHERE email = ?");
     $stmt->execute([$email]);
     $usuario = $stmt->fetch();
 
     if ($usuario && password_verify($senha, $usuario['senha_hash'])) {
-        $_SESSION['loja_usuario_id']   = $usuario['id'];
-        $_SESSION['loja_usuario_nome'] = $usuario['nome'];
+        $_SESSION['loja_usuario_id']      = $usuario['id'];
+        $_SESSION['loja_usuario_nome']    = $usuario['nome'];
+        $_SESSION['loja_cliente_id']      = $usuario['cliente_id'];
+        $_SESSION['loja_perfil_completo'] = (bool)$usuario['perfil_completo'];
 
         $destino = $_GET['voltar'] ?? 'index.php';
         header('Location: ' . $destino);
