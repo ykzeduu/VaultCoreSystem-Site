@@ -1,0 +1,65 @@
+<?php
+session_start();
+require __DIR__ . '/includes/config.php';
+
+$erro = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = trim($_POST['email'] ?? '');
+    $senha = $_POST['senha'] ?? '';
+
+    $stmt = $pdo->prepare("SELECT id, nome, senha_hash FROM usuarios WHERE email = ?");
+    $stmt->execute([$email]);
+    $usuario = $stmt->fetch();
+
+    if ($usuario && password_verify($senha, $usuario['senha_hash'])) {
+        $_SESSION['loja_usuario_id']   = $usuario['id'];
+        $_SESSION['loja_usuario_nome'] = $usuario['nome'];
+
+        $destino = $_GET['voltar'] ?? 'index.php';
+        header('Location: ' . $destino);
+        exit;
+    } else {
+        $erro = 'E-mail ou senha incorretos.';
+    }
+}
+?>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Entrar | VaultCore</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div class="container login-page">
+    <h1>Entrar</h1>
+    <p class="sub">Acesse sua conta para comprar equipamentos</p>
+
+    <?php if ($erro): ?>
+        <div class="alerta"><?= htmlspecialchars($erro) ?></div>
+    <?php endif; ?>
+
+    <form method="post" class="form-login" style="display:block">
+        <div class="form-group">
+            <label>E-mail</label>
+            <input type="email" name="email" required value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
+        </div>
+
+        <div class="form-group">
+            <label>Senha</label>
+            <input type="password" name="senha" required>
+        </div>
+
+        <button class="btn-entrar full">Entrar</button>
+    </form>
+
+    <div class="link-site">
+        Ainda não tem conta? <a href="loja-cadastro.php">Criar conta</a><br>
+        <a href="index.php">← Voltar para o site</a>
+    </div>
+</div>
+
+</body>
+</html>
