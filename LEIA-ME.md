@@ -28,12 +28,14 @@
 
 ## 🔧 Passo a passo para colocar no ar
 
-### 1. Criar o banco no TiDB Serverless (grátis, compatível com MySQL)
+### 1. Criar o cluster no TiDB Serverless (grátis, compatível com MySQL)
 1. Crie uma conta em https://tidbcloud.com
 2. Crie um cluster **Serverless** (grátis)
-3. Vá em **Connect**, escolha "General" e copie: host, porta, usuário e senha
-4. Abra o **SQL Editor / Chat2Query** do cluster e rode o conteúdo do arquivo
-   `schema.sql` (cria as 4 tabelas)
+3. Vá em **Connect**, escolha "General", clique em **Generate Password** e
+   copie: host, porta, usuário e senha (guarde a senha, só aparece uma vez)
+
+*Não precisa criar o banco/database manualmente nem achar o SQL Editor —
+o passo 3 abaixo faz isso tudo sozinho, sem precisar instalar nenhum programa.*
 
 ### 2. Configurar as variáveis de ambiente no Render
 No seu serviço do Render → **Environment** → adicione:
@@ -46,10 +48,27 @@ No seu serviço do Render → **Environment** → adicione:
 | `DB_USER` | usuário do TiDB |
 | `DB_PASSWORD` | senha do TiDB |
 | `ADMIN_PASSWORD` | a senha que você quer usar pra entrar no painel admin |
+| `SETUP_KEY` | invente uma chave secreta só sua, ex: `minhaChave2026` |
 
-Depois disso é só fazer o deploy — o `config.php` lê tudo isso sozinho.
+Depois disso é só fazer o deploy.
 
-### 3. Testar
+### 3. Criar as tabelas (sem precisar instalar nada)
+Depois que o deploy terminar, acesse no navegador:
+
+```
+https://SEU-SITE.onrender.com/setup-db.php?key=minhaChave2026
+```
+(troque `minhaChave2026` pelo valor que você colocou em `SETUP_KEY`)
+
+Essa página cria o banco `vaultcore` (se ainda não existir) e todas as
+tabelas automaticamente. Se aparecer "OK" em cada linha e a mensagem
+"Concluído", deu tudo certo.
+
+**Depois que funcionar, apague o arquivo `setup-db.php` do projeto** (ou pelo
+menos troque o `SETUP_KEY`), porque essa URL fica exposta pra qualquer um
+enquanto o arquivo existir.
+
+### 4. Testar o site
 - Acesse `/login.php` → entre como colaborador com a `ADMIN_PASSWORD` nova
 - Cadastre um cliente e um equipamento pra ver se o banco está gravando
 
