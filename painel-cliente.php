@@ -9,7 +9,7 @@ if (!isset($_SESSION['codigo_equipamento'])) {
 $codigo = $_SESSION['codigo_equipamento'];
 
 try {
-    require __DIR__ . '/config.php';
+    require __DIR__ . '/includes/config.php';
 } catch (PDOException $e) {
     die("Erro de conexão.");
 }
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['abrir_chamado'])) {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Painel do Cliente | VaultCore</title>
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 

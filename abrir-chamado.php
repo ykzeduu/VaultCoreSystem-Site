@@ -8,7 +8,7 @@ if (!isset($_SESSION["colaborador"]) || $_SESSION["colaborador"] !== true) {
 }
 
 /* CONEXÃO MYSQL */
-require __DIR__ . '/config.php';
+require __DIR__ . '/includes/config.php';
 
 /* BUSCA EQUIPAMENTOS PARA O SELECT */
 $stmt_eq = $pdo->query("SELECT e.id, e.codigo_equipamento, c.nome_fantasia, c.razao_social 
@@ -37,12 +37,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
 <meta charset="UTF-8">
 <title>Abrir Chamado | VaultCore</title>
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 
 <header>
-    <div class="logo">VaultCore System</div>
+    <div class="logo"><img src="assets/img/logo.svg" alt="VaultCore"></div>
     <a href="chamados.php" style="color:#fff; text-decoration:none; font-weight: bold;">← VOLTAR</a>
 </header>
 

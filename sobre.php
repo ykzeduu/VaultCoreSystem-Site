@@ -7,14 +7,14 @@ $paginaAtiva = 'sobre';
 <meta charset="UTF-8">
 <title>Sobre Nós - VaultCore</title>
 
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/css/style.css">
 </head>
 
 <body>
 
 <header>
     <div class="logo">
-        <img src="logo.png" alt="VaultCore">
+        <img src="assets/img/logo.svg" alt="VaultCore">
     </div>
 
     <nav>

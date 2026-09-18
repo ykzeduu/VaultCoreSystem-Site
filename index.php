@@ -7,14 +7,14 @@ $paginaAtiva = 'inicio';
 <meta charset="UTF-8">
 <title>VaultCore - Locação de Equipamentos de TI</title>
 
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/css/style.css">
 </head>
 
 <body>
 
 <header>
     <div class="logo">
-        <img src="logo.png" alt="VaultCore">
+        <img src="assets/img/logo.svg" alt="VaultCore">
     </div>
 
     <nav>
@@ -37,7 +37,7 @@ $paginaAtiva = 'inicio';
 
     <div class="grid-modelos">
         <div class="modelo">
-            <img src="pc1.webp">
+            <img src="assets/img/pc-essencial-a.svg">
             <h3>Essencial A</h3>
             <p>i5 / 8 GB RAM / SSD 240 GB</p>
             <a href="#" onclick="abrirWhatsApp('Olá! Tenho interesse no modelo Essencial A (i5 / 8GB / SSD 240GB).')">
@@ -46,7 +46,7 @@ $paginaAtiva = 'inicio';
         </div>
 
         <div class="modelo">
-            <img src="pc2.webp">
+            <img src="assets/img/pc-essencial-b.svg">
             <h3>Essencial B</h3>
             <p>i5 / 16 GB RAM / SSD 480 GB</p>
             <a href="#" onclick="abrirWhatsApp('Olá! Tenho interesse no modelo Essencial B (i5 / 16GB / SSD 480GB).')">
@@ -55,7 +55,7 @@ $paginaAtiva = 'inicio';
         </div>
 
         <div class="modelo">
-            <img src="pc3.webp">
+            <img src="assets/img/pc-performance-a.svg">
             <h3>Performance A</h3>
             <p>i7 / 16 GB RAM / SSD 240 GB</p>
             <a href="#" onclick="abrirWhatsApp('Olá! Tenho interesse no modelo Performance A (i7 / 16GB / SSD 240GB).')">
@@ -64,7 +64,7 @@ $paginaAtiva = 'inicio';
         </div>
 
         <div class="modelo">
-            <img src="pc4.webp">
+            <img src="assets/img/pc-performance-b.svg">
             <h3>Performance B</h3>
             <p>i7 / 16 GB RAM / SSD 480 GB</p>
             <a href="#" onclick="abrirWhatsApp('Olá! Tenho interesse no modelo Performance B (i7 / 16GB / SSD 480GB).')">
@@ -106,7 +106,7 @@ $paginaAtiva = 'inicio';
 
 <section class="kits">
     <div class="conteudo">
-        <img src="setup-completo.jpg">
+        <img src="assets/img/kit-completo.svg">
         <div>
             <h2>Kits completos</h2>
             <p>

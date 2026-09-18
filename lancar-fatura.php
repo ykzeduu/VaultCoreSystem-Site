@@ -2,7 +2,7 @@
 session_start();
 if (!isset($_SESSION["colaborador"]) || $_SESSION["colaborador"] !== true) { header("Location: login.php"); exit; }
 
-require __DIR__ . '/config.php';
+require __DIR__ . '/includes/config.php';
 
 // --- LÓGICA DE PROCESSAMENTO ---
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['cliente_id'])) {
@@ -73,12 +73,12 @@ $precos_geracoes = [
 <head>
     <meta charset="UTF-8">
     <title>Lançar Contrato | VaultCore</title>
-    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 
 <header>
-    <div class="logo">VaultCore System</div>
+    <div class="logo"><img src="assets/img/logo.svg" alt="VaultCore"></div>
     <a href="financeiro.php" style="color:#fff; text-decoration:none; font-weight:bold;">← VOLTAR</a>
 </header>
 

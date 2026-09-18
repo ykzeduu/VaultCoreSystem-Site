@@ -20,13 +20,13 @@ if (!isset($_SESSION["colaborador"]) || $_SESSION["colaborador"] !== true) {
 <meta charset="UTF-8">
 <title>Painel Administrativo | VaultCore</title>
 
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/css/style.css">
 </head>
 
 <body>
 
 <header>
-    <div class="logo">VaultCore System</div>
+    <div class="logo"><img src="assets/img/logo.svg" alt="VaultCore"></div>
     <nav>
         <a href="admin.php" class="ativo">Dashboard</a>
         <a href="equipamentos.php">Equipamentos</a>

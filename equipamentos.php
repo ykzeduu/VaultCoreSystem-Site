@@ -15,7 +15,7 @@ if (!isset($_SESSION["colaborador"]) || $_SESSION["colaborador"] !== true) {
 }
 
 /* CONEXÃO MYSQL */
-require __DIR__ . '/config.php';
+require __DIR__ . '/includes/config.php';
 
 /* BUSCA E LISTAGEM */
 $busca = $_GET['busca'] ?? '';
@@ -47,12 +47,12 @@ $equipamentos = $stmt->fetchAll();
 <head>
 <meta charset="UTF-8">
 <title>Inventário de Equipamentos | VaultCore</title>
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 
 <header>
-    <div class="logo">VaultCore System</div>
+    <div class="logo"><img src="assets/img/logo.svg" alt="VaultCore"></div>
     <nav>
         <a href="admin.php">Dashboard</a>
         <a href="equipamentos.php" class="ativo">Equipamentos</a>

@@ -7,7 +7,7 @@ if (!isset($_SESSION["colaborador"]) || $_SESSION["colaborador"] !== true) {
 }
 
 /* CONEXÃO */
-require __DIR__ . '/config.php';
+require __DIR__ . '/includes/config.php';
 
 $id = $_GET['id'] ?? null;
 if (!$id) { header("Location: clientes.php"); exit; }
@@ -52,12 +52,12 @@ if (!$cliente) { header("Location: clientes.php"); exit; }
 <head>
 <meta charset="UTF-8">
 <title>Editar Cliente | VaultCore Admin</title>
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 
 <header>
-    <div class="logo">VaultCore System</div>
+    <div class="logo"><img src="assets/img/logo.svg" alt="VaultCore"></div>
     <a href="clientes.php" style="color:#fff; text-decoration:none; font-weight: bold;">← VOLTAR</a>
 </header>
 

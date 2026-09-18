@@ -8,7 +8,7 @@ if (!isset($_SESSION["colaborador"]) || $_SESSION["colaborador"] !== true) {
 }
 
 /* CONEXÃO MYSQL */
-require __DIR__ . '/config.php';
+require __DIR__ . '/includes/config.php';
 
 $id_cliente = $_GET['id'] ?? null;
 if (!$id_cliente) { header("Location: financeiro.php"); exit; }
@@ -65,12 +65,12 @@ $todas_parcelas = $stmt_fin->fetchAll();
 <head>
 <meta charset="UTF-8">
 <title>Gestão Financeira | VaultCore</title>
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 
 <header>
-    <div class="logo">VaultCore System</div>
+    <div class="logo"><img src="assets/img/logo.svg" alt="VaultCore"></div>
     <nav>
         <a href="admin.php">Dashboard</a>
         <a href="equipamentos.php">Equipamentos</a>

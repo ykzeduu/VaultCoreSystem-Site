@@ -22,9 +22,35 @@
    Isso deixa o site com visual mais moderno e profissional, e qualquer
    ajuste de cor/fonte agora é feito em um lugar só.
 
-5. Criei `schema.sql` com a estrutura das 4 tabelas que o sistema usa
+5. Criei `sql/schema.sql` com a estrutura das 4 tabelas que o sistema usa
    (`clientes`, `equipamentos`, `chamados`, `financeiro`), reconstruída a
    partir das queries que já existiam no código.
+
+6. **Bug do botão "Sou Colaborador" que sumia no login** — a tela de login
+   dependia de uma regra de CSS que escondia os dois formulários até você
+   clicar em "Sou Cliente" ou "Sou Colaborador". Essa regra tinha ficado de
+   fora do CSS novo. Corrigido.
+
+7. **Estrutura de pastas organizada.** Antes eram ~30 arquivos soltos na
+   raiz. Agora:
+   - `includes/config.php` → conexão com o banco
+   - `sql/schema.sql` → script de criação das tabelas
+   - `assets/css/style.css` → design único do site
+   - `assets/img/` → logo e ilustrações
+   - os arquivos `.php` de cada página continuam na raiz (login.php,
+     admin.php, clientes.php etc.) porque são os endereços que o site
+     usa (ex: `seusite.com/clientes.php`) — mudar isso quebraria os links.
+
+8. **Logo nova**, feita do zero em SVG (vetor — nunca fica pixelizada,
+   funciona em qualquer tamanho): `assets/img/logo.svg`.
+
+9. **Imagens dos equipamentos que estavam faltando** (`pc1.webp`, `pc2.webp`,
+   `pc3.webp`, `pc4.webp`, `setup-completo.jpg` — nenhum desses arquivos
+   existia no projeto original, por isso apareciam quebrados). Coloquei
+   ilustrações vetoriais próprias no lugar (`assets/img/pc-essencial-a.svg`
+   e as demais), sem nenhum problema de direitos autorais. Quando você tiver
+   fotos reais dos equipamentos, é só substituir esses arquivos mantendo o
+   mesmo nome (ou trocar o `src=""` correspondente no `index.php`).
 
 ## 🔧 Passo a passo para colocar no ar
 
