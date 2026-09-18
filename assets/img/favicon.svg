@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 60" width="56" height="60">
+  <defs>
+    <linearGradient id="fv-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5b7cfa"/>
+      <stop offset="100%" stop-color="#3d56d6"/>
+    </linearGradient>
+  </defs>
+
+  <path d="M28 0 L52 9 V27 C52 41 42 50.5 28 56 C14 50.5 4 41 4 27 V9 Z"
+        fill="url(#fv-grad)"/>
+  <path d="M28 4 L48 12 V27 C48 39 39.5 47 28 51.6 C16.5 47 8 39 8 27 V12 Z"
+        fill="#0b1a26"/>
+  <circle cx="28" cy="24" r="6.2" fill="url(#fv-grad)"/>
+  <circle cx="28" cy="24" r="6.2" fill="none" stroke="#f5b942" stroke-width="0.9" opacity="0.7"/>
+  <rect x="24.6" y="24" width="6.8" height="12" rx="2.4" fill="url(#fv-grad)"/>
+  <circle cx="28" cy="26.5" r="1.5" fill="#f5b942"/>
+</svg>

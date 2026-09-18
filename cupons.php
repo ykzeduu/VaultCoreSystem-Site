@@ -49,6 +49,8 @@ $cupons = $pdo->query("SELECT * FROM cupons ORDER BY criado_em DESC")->fetchAll(
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+<link rel="alternate icon" href="assets/img/favicon.ico">
 <title>Cupons | VaultCore</title>
 <link rel="stylesheet" href="assets/css/style.css">
 </head>

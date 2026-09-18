@@ -40,6 +40,8 @@ $linhaDigitavel = '34191.79001 01043.510047 91020.150008 4 ' . rand(10000000000,
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+<link rel="alternate icon" href="assets/img/favicon.ico">
 <title>Checkout | VaultCore</title>
 <link rel="stylesheet" href="assets/css/style.css">
 </head>

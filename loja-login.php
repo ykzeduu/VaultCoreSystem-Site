@@ -42,6 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+<link rel="alternate icon" href="assets/img/favicon.ico">
 <title>Entrar | VaultCore</title>
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
